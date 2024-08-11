@@ -1,0 +1,44 @@
+{
+  "name": "asvvizit/streamtalk",
+  "description": "A package for Laravel PHP Framework to add a complete real-time chat system.",
+  "type": "library",
+  "keywords": [
+    "laravel",
+    "messenger",
+    "conversations",
+    "chat",
+    "php",
+    "pusher",
+    "realtime",
+    "real-time",
+    "streamtalk",
+    "StreamTalk"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sergey Andrianov",
+      "email": "dillerasvasviner@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "pusher/pusher-php-server": "^6.0|^7.0|^7.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "StreamTalk\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "StreamTalk\\StreamTalkServiceProvider"
+      ],
+      "aliases": {
+        "StreamTalk": "StreamTalk\\Facades\\StreamTalkMessenger"
+      }
+    }
+  }
+}
