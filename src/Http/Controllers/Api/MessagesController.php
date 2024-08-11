@@ -72,7 +72,7 @@ class MessagesController extends Controller
      */
     public function download($fileName)
     {
-        $path = config('StreamTalk.attachments.folder') . '/' . $fileName;
+        $path = config('streamtalk.attachments.folder') . '/' . $fileName;
         if (StreamTalk::storage()->exists($path)) {
             return response()->json([
                 'file_name' => $fileName,
@@ -116,7 +116,7 @@ class MessagesController extends Controller
                     $attachment_title = $file->getClientOriginalName();
                     // upload attachment and store the new name
                     $attachment = Str::uuid() . "." . $file->extension();
-                    $file->storeAs(config('StreamTalk.attachments.folder'), $attachment, config('StreamTalk.storage_disk_name'));
+                    $file->storeAs(config('streamtalk.attachments.folder'), $attachment, config('streamtalk.storage_disk_name'));
                 } else {
                     $error->status = 1;
                     $error->message = "File extension not allowed!";
@@ -301,7 +301,7 @@ class MessagesController extends Controller
         $images = StreamTalk::getSharedPhotos($request['user_id']);
 
         foreach ($images as $image) {
-            $image = asset(config('StreamTalk.attachments.folder') . $image);
+            $image = asset(config('streamtalk.attachments.folder') . $image);
         }
         // send the response
         return Response::json([
@@ -354,7 +354,7 @@ class MessagesController extends Controller
             if ($file->getSize() < StreamTalk::getMaxUploadSize()) {
                 if (in_array(strtolower($file->extension()), $allowed_images)) {
                     // delete the older one
-                    if (Auth::user()->avatar != config('StreamTalk.user_avatar.default')) {
+                    if (Auth::user()->avatar != config('streamtalk.user_avatar.default')) {
                         $path = StreamTalk::getUserAvatarUrl(Auth::user()->avatar);
                         if (StreamTalk::storage()->exists($path)) {
                             StreamTalk::storage()->delete($path);
@@ -363,7 +363,7 @@ class MessagesController extends Controller
                     // upload
                     $avatar = Str::uuid() . "." . $file->extension();
                     $update = User::where('id', Auth::user()->id)->update(['avatar' => $avatar]);
-                    $file->storeAs(config('StreamTalk.user_avatar.folder'), $avatar, config('StreamTalk.storage_disk_name'));
+                    $file->storeAs(config('streamtalk.user_avatar.folder'), $avatar, config('streamtalk.storage_disk_name'));
                     $success = $update ? 1 : 0;
                 } else {
                     $msg = "File extension not allowed!";

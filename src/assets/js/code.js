@@ -30,15 +30,15 @@ const setMessengerId = (id) => $("meta[name=id]").attr("content", id);
  * Pusher initialization
  *-------------------------------------------------------------
  */
-Pusher.logToConsole = StreamTalk.pusher.debug;
-const pusher = new Pusher(StreamTalk.pusher.key, {
-    encrypted: StreamTalk.pusher.options.encrypted,
-    cluster: StreamTalk.pusher.options.cluster,
-    wsHost: StreamTalk.pusher.options.host,
-    wsPort: StreamTalk.pusher.options.port,
-    wssPort: StreamTalk.pusher.options.port,
-    forceTLS: StreamTalk.pusher.options.useTLS,
-    authEndpoint: StreamTalk.pusherAuthEndpoint,
+Pusher.logToConsole = streamtalk.pusher.debug;
+const pusher = new Pusher(streamtalk.pusher.key, {
+    encrypted: streamtalk.pusher.options.encrypted,
+    cluster: streamtalk.pusher.options.cluster,
+    wsHost: streamtalk.pusher.options.host,
+    wsPort: streamtalk.pusher.options.port,
+    wssPort: streamtalk.pusher.options.port,
+    forceTLS: streamtalk.pusher.options.useTLS,
+    authEndpoint: streamtalk.pusherAuthEndpoint,
   auth: {
     headers: {
       "X-CSRF-TOKEN": csrfToken,
@@ -623,7 +623,7 @@ function cancelUpdatingAvatar() {
  */
 
 // subscribe to the channel
-const channelName = "private-StreamTalk";
+const channelName = "private-streamtalk";
 var channel = pusher.subscribe(`${channelName}.${auth_id}`);
 var clientSendChannel;
 var clientListenChannel;
@@ -1406,7 +1406,7 @@ $(document).ready(function () {
     const { name: fileName, size: fileSize } = file;
     const fileExtension = fileName.split(".").pop();
     if (
-      !StreamTalk.allAllowedExtensions.includes(
+      !streamtalk.allAllowedExtensions.includes(
         fileExtension.toString().toLowerCase()
       )
     ) {
@@ -1415,7 +1415,7 @@ $(document).ready(function () {
       return false;
     }
     // Validate file size.
-    if (fileSize > StreamTalk.maxUploadSize) {
+    if (fileSize > streamtalk.maxUploadSize) {
       alert("File is too large!");
       return false;
     }
@@ -1689,9 +1689,9 @@ emojiPicker.on("emoji", (emoji) => {
  *-------------------------------------------------------------
  */
 function playNotificationSound(soundName, condition = false) {
-  if ((document.hidden || condition) && StreamTalk.sounds.enabled) {
+  if ((document.hidden || condition) && streamtalk.sounds.enabled) {
     const sound = new Audio(
-      `/${StreamTalk.sounds.public_path}/${StreamTalk.sounds[soundName]}`
+      `/${streamtalk.sounds.public_path}/${streamtalk.sounds[soundName]}`
     );
     sound.play();
   }

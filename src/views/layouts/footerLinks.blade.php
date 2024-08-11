@@ -3,12 +3,12 @@
 <script >
     // Gloabl StreamTalk variables from PHP to JS
     window.StreamTalk = {
-        name: "{{ config('StreamTalk.name') }}",
-        sounds: {!! json_encode(config('StreamTalk.sounds')) !!},
-        allowedImages: {!! json_encode(config('StreamTalk.attachments.allowed_images')) !!},
-        allowedFiles: {!! json_encode(config('StreamTalk.attachments.allowed_files')) !!},
+        name: "{{ config('streamtalk.name') }}",
+        sounds: {!! json_encode(config('streamtalk.sounds')) !!},
+        allowedImages: {!! json_encode(config('streamtalk.attachments.allowed_images')) !!},
+        allowedFiles: {!! json_encode(config('streamtalk.attachments.allowed_files')) !!},
         maxUploadSize: {{ StreamTalk::getMaxUploadSize() }},
-        pusher: {!! json_encode(config('StreamTalk.pusher')) !!},
+        pusher: {!! json_encode(config('streamtalk.pusher')) !!},
         pusherAuthEndpoint: '{{route("pusher.auth")}}'
     };
     window.StreamTalk.allAllowedExtensions = StreamTalk.allowedImages.concat(StreamTalk.allowedFiles);

@@ -16,7 +16,7 @@ class AddAvatarToUsers extends Migration
         Schema::table('users', function (Blueprint $table) {
             // if not exist, add the new column
             if (!Schema::hasColumn('users', 'avatar')) {
-                $table->string('avatar')->default(config('StreamTalk.user_avatar.default'));
+                $table->string('avatar')->default(config('streamtalk.user_avatar.default'));
             }
         });
     }

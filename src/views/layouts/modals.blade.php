@@ -51,9 +51,9 @@
                                 data-mode="{{ Auth::user()->dark_mode > 0 ? 1 : 0 }}"></span></p>
                             {{-- change messenger color  --}}
                             <p class="divider"></p>
-                            {{-- <p class="app-modal-header">Change {{ config('StreamTalk.name') }} Color</p> --}}
+                            {{-- <p class="app-modal-header">Change {{ config('streamtalk.name') }} Color</p> --}}
                             <div class="update-messengerColor">
-                            @foreach (config('StreamTalk.colors') as $color)
+                            @foreach (config('streamtalk.colors') as $color)
                                 <span style="background-color: {{ $color}}" data-color="{{$color}}" class="color-btn"></span>
                                 @if (($loop->index + 1) % 5 == 0)
                                     <br/>

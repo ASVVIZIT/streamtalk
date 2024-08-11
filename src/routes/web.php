@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 /*
 * This is the main app route [StreamTalk Messenger]
 */
-Route::get('/', 'MessagesController@index')->name(config('StreamTalk.routes.prefix'));
+Route::get('/', 'MessagesController@index')->name(config('streamtalk.routes.prefix'));
 
 /**
  *  Fetch info for specific id [user/group]
@@ -33,7 +33,7 @@ Route::post('/fetchMessages', 'MessagesController@fetch')->name('fetch.messages'
 /**
  * Download attachments route to create a downloadable links
  */
-Route::get('/download/{fileName}', 'MessagesController@download')->name(config('StreamTalk.attachments.download_route_name'));
+Route::get('/download/{fileName}', 'MessagesController@download')->name(config('streamtalk.attachments.download_route_name'));
 
 /**
  * Authentication for pusher private channels

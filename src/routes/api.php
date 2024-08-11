@@ -25,7 +25,7 @@ Route::post('/fetchMessages', 'MessagesController@fetch')->name('api.fetch.messa
 /**
  * Download attachments route to create a downloadable links
  */
-Route::get('/download/{fileName}', 'MessagesController@download')->name('api.'.config('StreamTalk.attachments.download_route_name'));
+Route::get('/download/{fileName}', 'MessagesController@download')->name('api.'.config('streamtalk.attachments.download_route_name'));
 
 /**
  * Make messages as seen

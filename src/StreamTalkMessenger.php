@@ -20,16 +20,16 @@ class StreamTalkMessenger
      */
     public function getMaxUploadSize()
     {
-        return config('StreamTalk.attachments.max_upload_size') * 1048576;
+        return config('streamtalk.attachments.max_upload_size') * 1048576;
     }
 
     public function __construct()
     {
         $this->pusher = new Pusher(
-            config('StreamTalk.pusher.key'),
-            config('StreamTalk.pusher.secret'),
-            config('StreamTalk.pusher.app_id'),
-            config('StreamTalk.pusher.options'),
+            config('streamtalk.pusher.key'),
+            config('streamtalk.pusher.secret'),
+            config('streamtalk.pusher.app_id'),
+            config('streamtalk.pusher.options'),
         );
     }
     /**
@@ -40,7 +40,7 @@ class StreamTalkMessenger
      */
     public function getAllowedImages()
     {
-        return config('StreamTalk.attachments.allowed_images');
+        return config('streamtalk.attachments.allowed_images');
     }
 
     /**
@@ -51,7 +51,7 @@ class StreamTalkMessenger
      */
     public function getAllowedFiles()
     {
-        return config('StreamTalk.attachments.allowed_files');
+        return config('streamtalk.attachments.allowed_files');
     }
 
     /**
@@ -61,7 +61,7 @@ class StreamTalkMessenger
      */
     public function getMessengerColors()
     {
-        return config('StreamTalk.colors');
+        return config('streamtalk.colors');
     }
 
     /**
@@ -292,9 +292,9 @@ class StreamTalkMessenger
      */
     public function getUserWithAvatar($user)
     {
-        if ($user->avatar == 'avatar.png' && config('StreamTalk.gravatar.enabled')) {
-            $imageSize = config('StreamTalk.gravatar.image_size');
-            $imageset = config('StreamTalk.gravatar.imageset');
+        if ($user->avatar == 'avatar.png' && config('streamtalk.gravatar.enabled')) {
+            $imageSize = config('streamtalk.gravatar.image_size');
+            $imageset = config('streamtalk.gravatar.imageset');
             $user->avatar = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($user->email))) . '?s=' . $imageSize . '&d=' . $imageset;
         } else {
             $user->avatar = self::getUserAvatarUrl($user->avatar);
@@ -375,7 +375,7 @@ class StreamTalkMessenger
             foreach ($this->fetchMessagesQuery($user_id)->get() as $msg) {
                 // delete file attached if exist
                 if (isset($msg->attachment)) {
-                    $path = config('StreamTalk.attachments.folder').'/'.json_decode($msg->attachment)->new_name;
+                    $path = config('streamtalk.attachments.folder').'/'.json_decode($msg->attachment)->new_name;
                     if (self::storage()->exists($path)) {
                         self::storage()->delete($path);
                     }
@@ -400,7 +400,7 @@ class StreamTalkMessenger
         try {
             $msg = Message::where('from_id', auth()->id())->where('id', $id)->firstOrFail();
             if (isset($msg->attachment)) {
-                $path = config('StreamTalk.attachments.folder') . '/' . json_decode($msg->attachment)->new_name;
+                $path = config('streamtalk.attachments.folder') . '/' . json_decode($msg->attachment)->new_name;
                 if (self::storage()->exists($path)) {
                     self::storage()->delete($path);
                 }
@@ -418,7 +418,7 @@ class StreamTalkMessenger
      */
     public function storage()
     {
-        return Storage::disk(config('StreamTalk.storage_disk_name'));
+        return Storage::disk(config('streamtalk.storage_disk_name'));
     }
 
     /**
@@ -429,7 +429,7 @@ class StreamTalkMessenger
      */
     public function getUserAvatarUrl($user_avatar_name)
     {
-        return self::storage()->url(config('StreamTalk.user_avatar.folder') . '/' . $user_avatar_name);
+        return self::storage()->url(config('streamtalk.user_avatar.folder') . '/' . $user_avatar_name);
     }
 
     /**
@@ -440,6 +440,6 @@ class StreamTalkMessenger
      */
     public function getAttachmentUrl($attachment_name)
     {
-        return self::storage()->url(config('StreamTalk.attachments.folder') . '/' . $attachment_name);
+        return self::storage()->url(config('streamtalk.attachments.folder') . '/' . $attachment_name);
     }
 }

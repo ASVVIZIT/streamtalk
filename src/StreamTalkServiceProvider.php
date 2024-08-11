@@ -107,7 +107,7 @@ class StreamTalkServiceProvider extends ServiceProvider
      */
     protected function loadRoutes()
     {
-        if (config('StreamTalk.routes.custom')) {
+        if (config('streamtalk.routes.custom')) {
             Route::group($this->routesConfigurations(), function () {
                 $this->loadRoutesFrom(base_path('routes/StreamTalk/web.php'));
             });
@@ -132,9 +132,9 @@ class StreamTalkServiceProvider extends ServiceProvider
     private function routesConfigurations()
     {
         return [
-            'prefix' => config('StreamTalk.routes.prefix'),
-            'namespace' =>  config('StreamTalk.routes.namespace'),
-            'middleware' => config('StreamTalk.routes.middleware'),
+            'prefix' => config('streamtalk.routes.prefix'),
+            'namespace' =>  config('streamtalk.routes.namespace'),
+            'middleware' => config('streamtalk.routes.middleware'),
         ];
     }
     /**
@@ -145,9 +145,9 @@ class StreamTalkServiceProvider extends ServiceProvider
     private function apiRoutesConfigurations()
     {
         return [
-            'prefix' => config('StreamTalk.api_routes.prefix'),
-            'namespace' =>  config('StreamTalk.api_routes.namespace'),
-            'middleware' => config('StreamTalk.api_routes.middleware'),
+            'prefix' => config('streamtalk.api_routes.prefix'),
+            'namespace' =>  config('streamtalk.api_routes.namespace'),
+            'middleware' => config('streamtalk.api_routes.middleware'),
         ];
     }
 }
