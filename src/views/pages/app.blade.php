@@ -1,4 +1,4 @@
-@include('streamtalk::layouts.headLinks')
+@include('StreamTalk::layouts.headLinks')
 <div class="messenger">
     {{-- ----------------------Users/Groups lists side---------------------- --}}
     <div class="messenger-listView {{ !!$id ? 'conversation-active' : '' }}">
@@ -94,7 +94,7 @@
 
         </div>
         {{-- Send Message Form --}}
-        @include('streamtalk::layouts.sendForm')
+        @include('StreamTalk::layouts.sendForm')
     </div>
     {{-- ---------------------- Info side ---------------------- --}}
     <div class="messenger-infoView app-scroll">
@@ -107,5 +107,5 @@
     </div>
 </div>
 
-@include('streamtalk::layouts.modals')
-@include('streamtalk::layouts.footerLinks')
+@include('StreamTalk::layouts.modals')
+@include('StreamTalk::layouts.footerLinks')
