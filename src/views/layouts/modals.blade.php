@@ -39,16 +39,14 @@
                         {{-- <div class="app-modal-header">Update your profile settings</div> --}}
                         <div class="app-modal-body">
                             {{-- Udate profile avatar --}}
-                            <div class="avatar av-l upload-avatar-preview streamtalk-d-flex"
-                            style="background-image: url('{{ streamtalk::getUserWithAvatar(Auth::user())->avatar }}');"
-                            ></div>
+                            <div class="avatar av-l upload-avatar-preview streamtalk-d-flex" style="background-image: url('{{ streamtalk::getUserWithAvatar(Auth::user())->avatar }}');"></div>
                             <p class="upload-avatar-details"></p>
-                            <label class="app-btn a-btn-primary update" style="background-color:{{$messengerColor}}">Загрузить новый<input class="upload-avatar streamtalk-d-none" accept="image/*" name="avatar" type="file" /></label>
+                            <label class="app-btn a-btn-primary update" style="background-color:{{$messengerColor}}">Загрузить новый аватар<input class="upload-avatar streamtalk-d-none" accept="image/*" name="avatar" type="file" /></label>
                             {{-- Dark/Light Mode  --}}
                             <p class="divider"></p>
-                            <p class="app-modal-header">Dark Mode (Темный режим)<span class="
-                                {{ Auth::user()->dark_mode > 0 ? 'fas' : 'far' }} fa-moon dark-mode-switch"
-                                data-mode="{{ Auth::user()->dark_mode > 0 ? 1 : 0 }}"></span></p>
+                            <p class="app-modal-header">Dark Mode (Темный режим)
+                                <span class="{{ Auth::user()->dark_mode > 0 ? 'fas' : 'far' }} fa-moon dark-mode-switch" data-mode="{{ Auth::user()->dark_mode > 0 ? 1 : 0 }}"></span>
+                            </p>
                             {{-- change messenger color  --}}
                             <p class="divider"></p>
                             {{-- <p class="app-modal-header">Change {{ config('streamtalk.name') }} Color</p> --}}

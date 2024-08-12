@@ -145,7 +145,7 @@ class MessagesController extends Controller
 
             // send to user using pusher
             if (Auth::user()->id != $request['id']) {
-                StreamTalk::push("private-StreamTalk.".$request['id'], 'messaging', [
+                StreamTalk::push("private-streamtalk.".$request['id'], 'messaging', [
                     'from_id' => Auth::user()->id,
                     'to_id' => $request['id'],
                     'message' => $messageData
