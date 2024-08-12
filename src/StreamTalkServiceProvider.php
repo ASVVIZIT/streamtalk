@@ -2,8 +2,8 @@
 
 namespace StreamTalk;
 
-use StreamTalk\Console\InstallCommand;
-use StreamTalk\Console\PublishCommand;
+use streamtalk\Console\InstallCommand;
+use streamtalk\Console\PublishCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,7 +17,7 @@ class StreamTalkServiceProvider extends ServiceProvider
     public function register()
     {
         app()->bind('StreamTalkMessenger', function () {
-            return new \StreamTalk\StreamTalkMessenger;
+            return new \streamtalk\StreamTalkMessenger;
         });
     }
 
@@ -87,9 +87,9 @@ class StreamTalkServiceProvider extends ServiceProvider
         // Assets
         $this->publishes([
             // CSS
-            __DIR__ . '/assets/css' => public_path('css/StreamTalk'),
+            __DIR__ . '/assets/css' => public_path('css/streamtalk'),
             // JavaScript
-            __DIR__ . '/assets/js' => public_path('js/StreamTalk'),
+            __DIR__ . '/assets/js' => public_path('js/streamtalk'),
             // Images
             __DIR__ . '/assets/imgs' => storage_path('app/public/' . $userAvatarFolder),
              // CSS
@@ -98,7 +98,7 @@ class StreamTalkServiceProvider extends ServiceProvider
 
         // Routes (API and Web)
         $this->publishes([
-            __DIR__ . '/routes' => base_path('routes/StreamTalk')
+            __DIR__ . '/routes' => base_path('routes/streamtalk')
         ], 'streamtalk-routes');
     }
 
@@ -111,10 +111,10 @@ class StreamTalkServiceProvider extends ServiceProvider
     {
         if (config('streamtalk.routes.custom')) {
             Route::group($this->routesConfigurations(), function () {
-                $this->loadRoutesFrom(base_path('routes/StreamTalk/web.php'));
+                $this->loadRoutesFrom(base_path('routes/streamtalk/web.php'));
             });
             Route::group($this->apiRoutesConfigurations(), function () {
-                $this->loadRoutesFrom(base_path('routes/StreamTalk/api.php'));
+                $this->loadRoutesFrom(base_path('routes/streamtalk/api.php'));
             });
         } else {
             Route::group($this->routesConfigurations(), function () {
