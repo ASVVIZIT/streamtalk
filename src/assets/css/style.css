@@ -17,7 +17,7 @@ body {
   /* General variables */
   --icon-size: 20px;
   --headers-padding: 1rem;
-  --listView-header-height: 110px;
+  --listView-header-height: 135px;
 
   /* Light theme variables */
   --primary-bg-color: #fff;
