@@ -29,7 +29,7 @@ class StreamTalkServiceProvider extends ServiceProvider
     public function boot()
     {
         // Load Views and Routes
-        $this->loadViewsFrom(__DIR__ . '/views', 'streamtalk');
+        $this->loadViewsFrom(__DIR__ . '/views', 'StreamTalk');
         $this->loadRoutes();
 
         if ($this->app->runningInConsole()) {
@@ -98,7 +98,7 @@ class StreamTalkServiceProvider extends ServiceProvider
 
         // Routes (API and Web)
         $this->publishes([
-            __DIR__ . '/routes' => base_path('routes/streamtalk')
+            __DIR__ . '/routes' => base_path('routes/StreamTalk')
         ], 'streamtalk-routes');
     }
 
@@ -111,10 +111,10 @@ class StreamTalkServiceProvider extends ServiceProvider
     {
         if (config('streamtalk.routes.custom')) {
             Route::group($this->routesConfigurations(), function () {
-                $this->loadRoutesFrom(base_path('routes/streamtalk/web.php'));
+                $this->loadRoutesFrom(base_path('routes/StreamTalk/web.php'));
             });
             Route::group($this->apiRoutesConfigurations(), function () {
-                $this->loadRoutesFrom(base_path('routes/streamtalk/api.php'));
+                $this->loadRoutesFrom(base_path('routes/StreamTalk/api.php'));
             });
         } else {
             Route::group($this->routesConfigurations(), function () {
