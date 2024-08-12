@@ -23,12 +23,12 @@ return [
     */
     'routes' => [
         'custom' => env('STREAMTALK_CUSTOM_ROUTES', false),
-        'prefix' => env('STREAMTALK_ROUTES_PREFIX', 'StreamTalk'),
+        'prefix' => env('STREAMTALK_ROUTES_PREFIX', 'streamtalk'),
         'middleware' => env('STREAMTALK_ROUTES_MIDDLEWARE', ['web','auth']),
         'namespace' => env('STREAMTALK_ROUTES_NAMESPACE', 'StreamTalk\Http\Controllers'),
     ],
     'api_routes' => [
-        'prefix' => env('STREAMTALK_API_ROUTES_PREFIX', 'StreamTalk/api'),
+        'prefix' => env('STREAMTALK_API_ROUTES_PREFIX', 'streamtalk/api'),
         'middleware' => env('STREAMTALK_API_ROUTES_MIDDLEWARE', ['api']),
         'namespace' => env('STREAMTALK_API_ROUTES_NAMESPACE', 'StreamTalk\Http\Controllers\Api'),
     ],
@@ -118,7 +118,7 @@ return [
     */
     'sounds' => [
         'enabled' => true,
-        'public_path' => 'sounds/StreamTalk',
+        'public_path' => 'sounds/streamtalk',
         'new_message' => 'new-message-sound.mp3',
     ]
 ];

@@ -13,7 +13,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'StreamTalk:install';
+    protected $signature = 'streamtalk:install';
 
     /**
      * The console command description.
@@ -55,12 +55,12 @@ class InstallCommand extends Command
         $this->info('[✓] done');
 
         $assetsToBePublished = [
-            'config' => config_path('StreamTalk.php'),
-            'views' => resource_path('views/vendor/StreamTalk'),
-            'assets' => public_path('css/StreamTalk'),
+            'config' => config_path('streamtalk.php'),
+            'views' => resource_path('views/vendor/streamtalk'),
+            'assets' => public_path('css/streamtalk'),
             'models' => app_path(($this->isV8 ? 'Models/' : '').'ChMessage.php'),
-            'migrations' => database_path('migrations/2019_09_22_192348_create_messages_table.php'),
-            'routes' => base_path('routes/StreamTalk'),
+            'migrations' => database_path('migrations/2024_09_22_192348_create_messages_table.php'),
+            'routes' => base_path('routes/streamtalk'),
         ];
 
         foreach ($assetsToBePublished as $target => $path) {
@@ -144,7 +144,7 @@ class InstallCommand extends Command
     private function publish($tag, $forcePublish = false)
     {
         $this->call('vendor:publish', [
-            '--tag' => 'StreamTalk-'.$tag,
+            '--tag' => 'streamtalk-'.$tag,
             '--force' => $forcePublish,
         ]);
     }

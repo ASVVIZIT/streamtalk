@@ -43,7 +43,7 @@ class MessagesController extends Controller
     public function index( $id = null)
     {
         $messenger_color = Auth::user()->messenger_color;
-        return view('StreamTalk::pages.app', [
+        return view('streamtalk::pages.app', [
             'id' => $id ?? 0,
             'messengerColor' => $messenger_color ? $messenger_color : StreamTalk::getFallbackColor(),
             'dark_mode' => Auth::user()->dark_mode < 1 ? 'light' : 'dark',
@@ -309,7 +309,7 @@ class MessagesController extends Controller
         foreach ($favorites->get() as $favorite) {
             // get user data
             $user = User::where('id', $favorite->favorite_id)->first();
-            $favoritesList .= view('StreamTalk::layouts.favorite', [
+            $favoritesList .= view('streamtalk::layouts.favorite', [
                 'user' => $user,
             ]);
         }
@@ -336,7 +336,7 @@ class MessagesController extends Controller
                     ->where('name', 'LIKE', "%{$input}%")
                     ->paginate($request->per_page ?? $this->perPage);
         foreach ($records->items() as $record) {
-            $getRecords .= view('StreamTalk::layouts.listItem', [
+            $getRecords .= view('streamtalk::layouts.listItem', [
                 'get' => 'search_item',
                 'user' => StreamTalk::getUserWithAvatar($record),
             ])->render();
@@ -365,7 +365,7 @@ class MessagesController extends Controller
 
         // shared with its template
         for ($i = 0; $i < count($shared); $i++) {
-            $sharedPhotos .= view('StreamTalk::layouts.listItem', [
+            $sharedPhotos .= view('streamtalk::layouts.listItem', [
                 'get' => 'sharedPhoto',
                 'image' => StreamTalk::getAttachmentUrl($shared[$i]),
             ])->render();

@@ -11,7 +11,7 @@ class PublishCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'StreamTalk:publish {--force : Overwrite any existing files}';
+    protected $signature = 'streamtalk:publish {--force : Overwrite any existing files}';
 
     /**
      * The console command description.
@@ -29,28 +29,28 @@ class PublishCommand extends Command
     {
         if($this->option('force')){
             $this->call('vendor:publish', [
-                '--tag' => 'StreamTalk-config',
+                '--tag' => 'streamtalk-config',
                 '--force' => true,
             ]);
 
             $this->call('vendor:publish', [
-                '--tag' => 'StreamTalk-migrations',
+                '--tag' => 'streamtalk-migrations',
                 '--force' => true,
             ]);
 
             $this->call('vendor:publish', [
-                '--tag' => 'StreamTalk-models',
+                '--tag' => 'streamtalk-models',
                 '--force' => true,
             ]);
         }
 
         $this->call('vendor:publish', [
-            '--tag' => 'StreamTalk-views',
+            '--tag' => 'streamtalk-views',
             '--force' => true,
         ]);
 
         $this->call('vendor:publish', [
-            '--tag' => 'StreamTalk-assets',
+            '--tag' => 'streamtalk-assets',
             '--force' => true,
         ]);
     }

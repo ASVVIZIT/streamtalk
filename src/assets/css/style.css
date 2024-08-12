@@ -1102,28 +1102,28 @@ div.loadingPlaceholder-date {
     overflow: hidden !important;
     text-overflow: ellipsis;
   }
-  .StreamTalk-md-block {
+  .streamtalk-md-block {
     display: block;
   }
 }
 
-.StreamTalk-d-flex {
+.streamtalk-d-flex {
   display: flex !important;
 }
 
-.StreamTalk-d-none {
+.streamtalk-d-none {
   display: none !important;
 }
 
-.StreamTalk-d-hidden {
+.streamtalk-d-hidden {
   visibility: hidden !important;
 }
 
-.StreamTalk-justify-content-between {
+.streamtalk-justify-content-between {
   justify-content: space-between !important;
 }
 
-.StreamTalk-align-items-center {
+.streamtalk-align-items-center {
   align-items: center !important;
 }
 

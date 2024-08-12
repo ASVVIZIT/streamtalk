@@ -1,4 +1,4 @@
-@include('StreamTalk::layouts.headLinks')
+@include('streamtalk::layouts.headLinks')
 <div class="messenger">
     {{-- ----------------------Users/Groups lists side---------------------- --}}
     <div class="messenger-listView {{ !!$id ? 'conversation-active' : '' }}">
@@ -31,7 +31,7 @@
                </div>
                {{-- Saved Messages --}}
                <p class="messenger-title"><span>Ваши сохранения</span></p>
-               {!! view('StreamTalk::layouts.listItem', ['get' => 'saved']) !!}
+               {!! view('streamtalk::layouts.listItem', ['get' => 'saved']) !!}
                {{-- Contact --}}
                <p class="messenger-title"><span>Все сообщения</span></p>
                <div class="listOfContacts" style="width: 100%;height: calc(100% - 272px);position: relative;"></div>
@@ -51,9 +51,9 @@
     <div class="messenger-messagingView">
         {{-- header title [conversation name] amd buttons --}}
         <div class="m-header m-header-messaging">
-            <nav class="StreamTalk-d-flex StreamTalk-justify-content-between StreamTalk-align-items-center">
+            <nav class="streamtalk-d-flex streamtalk-justify-content-between streamtalk-align-items-center">
                 {{-- header back button, avatar and user name --}}
-                <div class="StreamTalk-d-flex StreamTalk-justify-content-between StreamTalk-align-items-center">
+                <div class="streamtalk-d-flex streamtalk-justify-content-between streamtalk-align-items-center">
                     <a href="#" class="show-listView"><i class="fas fa-arrow-left"></i></a>
                     <div class="avatar av-s header-avatar" style="margin: 0px 10px; margin-top: -5px; margin-bottom: -5px;">
                     </div>
@@ -94,7 +94,7 @@
 
         </div>
         {{-- Send Message Form --}}
-        @include('StreamTalk::layouts.sendForm')
+        @include('streamtalk::layouts.sendForm')
     </div>
     {{-- ---------------------- Info side ---------------------- --}}
     <div class="messenger-infoView app-scroll">
@@ -103,9 +103,9 @@
             <p>Данные пользователя</p>
             <a href="#"><i class="fas fa-times"></i></a>
         </nav>
-        {!! view('StreamTalk::layouts.info')->render() !!}
+        {!! view('streamtalk::layouts.info')->render() !!}
     </div>
 </div>
 
-@include('StreamTalk::layouts.modals')
-@include('StreamTalk::layouts.footerLinks')
+@include('streamtalk::layouts.modals')
+@include('streamtalk::layouts.footerLinks')
