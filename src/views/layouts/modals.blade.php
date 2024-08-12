@@ -39,9 +39,9 @@
                         {{-- <div class="app-modal-header">Update your profile settings</div> --}}
                         <div class="app-modal-body">
                             {{-- Udate profile avatar --}}
-                            <div class="avatar av-l upload-avatar-preview streamtalk-d-flex" style="background-image: url('{{ StreamTalk::getUserWithAvatar(Auth::user())->avatar }}');"></div>
+                            <div class="avatar av-l upload-avatar-preview StreamTalk-d-flex" style="background-image: url('{{ StreamTalk::getUserWithAvatar(Auth::user())->avatar }}');"></div>
                             <p class="upload-avatar-details"></p>
-                            <label class="app-btn a-btn-primary update" style="background-color:{{$messengerColor}}">Загрузить новый аватар<input class="upload-avatar streamtalk-d-none" accept="image/*" name="avatar" type="file" /></label>
+                            <label class="app-btn a-btn-primary update" style="background-color:{{$messengerColor}}">Загрузить новый аватар<input class="upload-avatar StreamTalk-d-none" accept="image/*" name="avatar" type="file" /></label>
                             {{-- Dark/Light Mode  --}}
                             <p class="divider"></p>
                             <p class="app-modal-header">Dark Mode (Темный режим)

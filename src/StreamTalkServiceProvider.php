@@ -1,9 +1,9 @@
 <?php
 
-namespace streamtalk;
+namespace StreamTalk;
 
-use sreamtalk\Console\InstallCommand;
-use sreamtalk\Console\PublishCommand;
+use StreamTalk\Console\InstallCommand;
+use StreamTalk\Console\PublishCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,7 +17,7 @@ class StreamTalkServiceProvider extends ServiceProvider
     public function register()
     {
         app()->bind('StreamTalkMessenger', function () {
-            return new \streamtalk\StreamTalkMessenger;
+            return new \StreamTalk\StreamTalkMessenger;
         });
     }
 
@@ -29,7 +29,7 @@ class StreamTalkServiceProvider extends ServiceProvider
     public function boot()
     {
         // Load Views and Routes
-        $this->loadViewsFrom(__DIR__ . '/views', 'streamtalk');
+        $this->loadViewsFrom(__DIR__ . '/views', 'StreamTalk');
         $this->loadRoutes();
 
         if ($this->app->runningInConsole()) {
@@ -54,7 +54,7 @@ class StreamTalkServiceProvider extends ServiceProvider
         // Config
         $this->publishes([
             __DIR__ . '/config/streamtalk.php' => config_path('streamtalk.php')
-        ], 'streamtalk-config');
+        ], 'StreamTalk-config');
 
         // Migrations
 
@@ -66,40 +66,40 @@ class StreamTalkServiceProvider extends ServiceProvider
             __DIR__ . '/database/migrations/2022_01_10_99999_add_messenger_color_to_users.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'add_messenger_color_to_users.php'),
             __DIR__ . '/database/migrations/2022_01_10_99999_create_streamtalk_favorites_table.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'create_streamtalk_favorites_table.php'),
             __DIR__ . '/database/migrations/2022_01_10_99999_create_streamtalk_messages_table.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'create_streamtalk_messages_table.php'),
-        ], 'streamtalk-migrations');
+        ], 'StreamTalk-migrations');
 
         // Models
         $isV8 = explode('.', app()->version())[0] >= 8;
         $this->publishes([
             __DIR__ . '/Models' => app_path($isV8 ? 'Models' : '')
-        ], 'streamtalk-models');
+        ], 'StreamTalk-models');
 
         // Controllers
         $this->publishes([
             __DIR__ . '/Http/Controllers' => app_path('Http/Controllers/vendor/StreamTalk')
-        ], 'streamtalk-controllers');
+        ], 'StreamTalk-controllers');
 
         // Views
         $this->publishes([
             __DIR__ . '/views' => resource_path('views/vendor/StreamTalk')
-        ], 'streamtalk-views');
+        ], 'StreamTalk-views');
 
         // Assets
         $this->publishes([
             // CSS
-            __DIR__ . '/assets/css' => public_path('css/streamtalk'),
+            __DIR__ . '/assets/css' => public_path('css/StreamTalk'),
             // JavaScript
-            __DIR__ . '/assets/js' => public_path('js/streamtalk'),
+            __DIR__ . '/assets/js' => public_path('js/StreamTalk'),
             // Images
             __DIR__ . '/assets/imgs' => storage_path('app/public/' . $userAvatarFolder),
              // CSS
-             __DIR__ . '/assets/sounds' => public_path('sounds/streamtalk'),
-        ], 'streamtalk-assets');
+             __DIR__ . '/assets/sounds' => public_path('sounds/StreamTalk'),
+        ], 'StreamTalk-assets');
 
         // Routes (API and Web)
         $this->publishes([
-            __DIR__ . '/routes' => base_path('routes/streamtalk')
-        ], 'streamtalk-routes');
+            __DIR__ . '/routes' => base_path('routes/StreamTalk')
+        ], 'StreamTalk-routes');
     }
 
     /**
@@ -111,10 +111,10 @@ class StreamTalkServiceProvider extends ServiceProvider
     {
         if (config('streamtalk.routes.custom')) {
             Route::group($this->routesConfigurations(), function () {
-                $this->loadRoutesFrom(base_path('routes/streamtalk/web.php'));
+                $this->loadRoutesFrom(base_path('routes/StreamTalk/web.php'));
             });
             Route::group($this->apiRoutesConfigurations(), function () {
-                $this->loadRoutesFrom(base_path('routes/streamtalk/api.php'));
+                $this->loadRoutesFrom(base_path('routes/StreamTalk/api.php'));
             });
         } else {
             Route::group($this->routesConfigurations(), function () {

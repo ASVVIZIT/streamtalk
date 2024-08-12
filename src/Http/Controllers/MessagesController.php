@@ -1,6 +1,6 @@
 <?php
 
-namespace streamtalk\Http\Controllers;
+namespace StreamTalk\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Response;
 use App\Models\User;
 use App\Models\ChMessage as Message;
 use App\Models\ChFavorite as Favorite;
-use sreamtalk\Facades\StreamTalkMessenger as StreamTalk;
+use StreamTalk\Facades\StreamTalkMessenger as StreamTalk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
@@ -142,7 +142,7 @@ class MessagesController extends Controller
             ]);
             $messageData = StreamTalk::parseMessage($message);
             if (Auth::user()->id != $request['id']) {
-                StreamTalk::push("private-streamtalk.".$request['id'], 'messaging', [
+                StreamTalk::push("private-StreamTalk.".$request['id'], 'messaging', [
                     'from_id' => Auth::user()->id,
                     'to_id' => $request['id'],
                     'message' => StreamTalk::messageCard($messageData, true)

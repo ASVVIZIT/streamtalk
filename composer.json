@@ -11,7 +11,6 @@
     "pusher",
     "realtime",
     "real-time",
-    "streamtalk",
     "StreamTalk"
   ],
   "license": "MIT",
@@ -28,16 +27,16 @@
   },
   "autoload": {
     "psr-4": {
-      "streamtalk\\": "src/"
+      "StreamTalk\\": "src/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "streamtalk\\StreamTalkServiceProvider"
+        "StreamTalk\\StreamTalkServiceProvider"
       ],
       "aliases": {
-        "streamtalk": "streamtalk\\Facades\\StreamTalkMessenger"
+        "StreamTalk": "StreamTalk\\Facades\\StreamTalkMessenger"
       }
     }
   }

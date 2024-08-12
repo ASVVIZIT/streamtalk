@@ -1,6 +1,6 @@
 <?php
 
-namespace streamtalk\Traits;
+namespace StreamTalk\Traits;
 
 use Illuminate\Support\Str;
 

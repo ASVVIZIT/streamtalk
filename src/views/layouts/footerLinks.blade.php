@@ -1,8 +1,8 @@
 <script src="https://js.pusher.com/7.2.4/pusher.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
 <script >
-    // Gloabl streamtalk variables from PHP to JS
-    window.streamtalk = {
+    // Gloabl StreamTalk variables from PHP to JS
+    window.StreamTalk = {
         name: "{{ config('streamtalk.name') }}",
         sounds: {!! json_encode(config('streamtalk.sounds')) !!},
         allowedImages: {!! json_encode(config('streamtalk.attachments.allowed_images')) !!},
@@ -11,7 +11,7 @@
         pusher: {!! json_encode(config('streamtalk.pusher')) !!},
         pusherAuthEndpoint: '{{route("pusher.auth")}}'
     };
-    window.streamtalk.allAllowedExtensions = streamtalk.allowedImages.concat(streamtalk.allowedFiles);
+    window.StreamTalk.allAllowedExtensions = StreamTalk.allowedImages.concat(StreamTalk.allowedFiles);
 </script>
-<script src="{{ asset('js/streamtalk/utils.js') }}"></script>
-<script src="{{ asset('js/streamtalk/code.js') }}"></script>
+<script src="{{ asset('js/StreamTalk/utils.js') }}"></script>
+<script src="{{ asset('js/StreamTalk/code.js') }}"></script>

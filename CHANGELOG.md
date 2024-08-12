@@ -239,7 +239,7 @@ All notable changes to this project will be documented in this file.
 - Models & Migrations' tables names changed (added `ch` prefix to avoid duplication) solves issue #68.
   - Models changed to (`ChMessage`, `ChFavorite`)
   - Migrations' tables names (`ch_messages`, `ch_favorites`)
-- Configuration file `config/streamtalk.php`.
+- Configuration file `config/StreamTalk.php`.
 
 ## v1.0.1 - (2020-09-30)
 

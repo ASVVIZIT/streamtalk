@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use sreamtalk\Traits\UUID;
-use sreamtalk\MessageCollection;
+use StreamTalk\Traits\UUID;
+use StreamTalk\MessageCollection;
 
 
 class ChMessage extends Model

@@ -1,6 +1,6 @@
 <?php
 
-namespace streamtalk\Console;
+namespace StreamTalk\Console;
 
 use Illuminate\Console\Command;
 
@@ -11,7 +11,7 @@ class PublishCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'streamtalk:publish {--force : Overwrite any existing files}';
+    protected $signature = 'StreamTalk:publish {--force : Overwrite any existing files}';
 
     /**
      * The console command description.
@@ -29,28 +29,28 @@ class PublishCommand extends Command
     {
         if($this->option('force')){
             $this->call('vendor:publish', [
-                '--tag' => 'streamtalk-config',
+                '--tag' => 'StreamTalk-config',
                 '--force' => true,
             ]);
 
             $this->call('vendor:publish', [
-                '--tag' => 'streamtalk-migrations',
+                '--tag' => 'StreamTalk-migrations',
                 '--force' => true,
             ]);
 
             $this->call('vendor:publish', [
-                '--tag' => 'streamtalk-models',
+                '--tag' => 'StreamTalk-models',
                 '--force' => true,
             ]);
         }
 
         $this->call('vendor:publish', [
-            '--tag' => 'streamtalk-views',
+            '--tag' => 'StreamTalk-views',
             '--force' => true,
         ]);
 
         $this->call('vendor:publish', [
-            '--tag' => 'streamtalk-assets',
+            '--tag' => 'StreamTalk-assets',
             '--force' => true,
         ]);
     }

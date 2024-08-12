@@ -118,7 +118,7 @@ return [
     */
     'sounds' => [
         'enabled' => true,
-        'public_path' => 'sounds/streamtalk',
+        'public_path' => 'sounds/StreamTalk',
         'new_message' => 'new-message-sound.mp3',
     ]
 ];

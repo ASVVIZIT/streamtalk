@@ -1,13 +1,13 @@
 <?php
 
-namespace streamtalk\Http\Controllers\Api;
+namespace StreamTalk\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
 use App\Models\ChMessage as Message;
 use App\Models\ChFavorite as Favorite;
-use sreamtalk\Facades\StreamTalkMessenger as StreamTalk;
+use StreamTalk\Facades\StreamTalkMessenger as StreamTalk;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -145,7 +145,7 @@ class MessagesController extends Controller
 
             // send to user using pusher
             if (Auth::user()->id != $request['id']) {
-                StreamTalk::push("private-streamtalk.".$request['id'], 'messaging', [
+                StreamTalk::push("private-StreamTalk.".$request['id'], 'messaging', [
                     'from_id' => Auth::user()->id,
                     'to_id' => $request['id'],
                     'message' => $messageData

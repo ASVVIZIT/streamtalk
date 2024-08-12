@@ -11,15 +11,15 @@
 {{-- scripts --}}
 <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{{ asset('js/streamtalk/font.awesome.min.js') }}"></script>
-<script src="{{ asset('js/streamtalk/autosize.js') }}"></script>
+<script src="{{ asset('js/StreamTalk/font.awesome.min.js') }}"></script>
+<script src="{{ asset('js/StreamTalk/autosize.js') }}"></script>
 
 <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
 
 {{-- styles --}}
 <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css'/>
-<link href="{{ asset('css/streamtalk/style.css') }}" rel="stylesheet" />
-<link href="{{ asset('css/streamtalk/'.$dark_mode.'.mode.css') }}" rel="stylesheet" />
+<link href="{{ asset('css/StreamTalk/style.css') }}" rel="stylesheet" />
+<link href="{{ asset('css/StreamTalk/'.$dark_mode.'.mode.css') }}" rel="stylesheet" />
 
 {{-- Setting messenger primary color to css --}}
 <style>

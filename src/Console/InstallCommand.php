@@ -1,6 +1,6 @@
 <?php
 
-namespace streamtalk\Console;
+namespace StreamTalk\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
@@ -13,7 +13,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'streamtalk:install';
+    protected $signature = 'StreamTalk:install';
 
     /**
      * The console command description.
@@ -56,11 +56,11 @@ class InstallCommand extends Command
 
         $assetsToBePublished = [
             'config' => config_path('streamtalk.php'),
-            'views' => resource_path('views/vendor/streamtalk'),
-            'assets' => public_path('css/streamtalk'),
+            'views' => resource_path('views/vendor/StreamTalk'),
+            'assets' => public_path('css/StreamTalk'),
             'models' => app_path(($this->isV8 ? 'Models/' : '').'ChMessage.php'),
             'migrations' => database_path('migrations/2024_09_22_192348_create_messages_table.php'),
-            'routes' => base_path('routes/streamtalk'),
+            'routes' => base_path('routes/StreamTalk'),
         ];
 
         foreach ($assetsToBePublished as $target => $path) {
@@ -144,7 +144,7 @@ class InstallCommand extends Command
     private function publish($tag, $forcePublish = false)
     {
         $this->call('vendor:publish', [
-            '--tag' => 'streamtalk-'.$tag,
+            '--tag' => 'StreamTalk-'.$tag,
             '--force' => $forcePublish,
         ]);
     }
