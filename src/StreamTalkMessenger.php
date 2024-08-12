@@ -184,7 +184,7 @@ class StreamTalkMessenger
         if($renderDefaultCard) {
             $data['isSender'] =  false;
         }
-        return view('streamtalk::layouts.messageCard', $data)->render();
+        return view('StreamTalk::layouts.messageCard', $data)->render();
     }
 
     /**
@@ -273,7 +273,7 @@ class StreamTalkMessenger
                 $lastMessage->created_at = $lastMessage->created_at->toIso8601String();
                 $lastMessage->timeAgo = $lastMessage->created_at->diffForHumans();
             }
-            return view('streamtalk::layouts.listItem', [
+            return view('StreamTalk::layouts.listItem', [
                 'get' => 'users',
                 'user' => $this->getUserWithAvatar($user),
                 'lastMessage' => $lastMessage,

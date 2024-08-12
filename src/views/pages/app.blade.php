@@ -31,7 +31,7 @@
                </div>
                {{-- Saved Messages --}}
                <p class="messenger-title"><span>Ваши сохранения</span></p>
-               {!! view('streamtalk::layouts.listItem', ['get' => 'saved']) !!}
+               {!! view('StreamTalk::layouts.listItem', ['get' => 'saved']) !!}
                {{-- Contact --}}
                <p class="messenger-title"><span>Все сообщения</span></p>
                <div class="listOfContacts" style="width: 100%;height: calc(100% - 272px);position: relative;"></div>
@@ -103,7 +103,7 @@
             <p>Данные пользователя</p>
             <a href="#"><i class="fas fa-times"></i></a>
         </nav>
-        {!! view('streamtalk::layouts.info')->render() !!}
+        {!! view('StreamTalk::layouts.info')->render() !!}
     </div>
 </div>
 

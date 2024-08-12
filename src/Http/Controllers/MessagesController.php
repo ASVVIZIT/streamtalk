@@ -43,7 +43,7 @@ class MessagesController extends Controller
     public function index( $id = null)
     {
         $messenger_color = Auth::user()->messenger_color;
-        return view('streamtalk::pages.app', [
+        return view('StreamTalk::pages.app', [
             'id' => $id ?? 0,
             'messengerColor' => $messenger_color ? $messenger_color : StreamTalk::getFallbackColor(),
             'dark_mode' => Auth::user()->dark_mode < 1 ? 'light' : 'dark',
@@ -142,7 +142,7 @@ class MessagesController extends Controller
             ]);
             $messageData = StreamTalk::parseMessage($message);
             if (Auth::user()->id != $request['id']) {
-                StreamTalk::push("private-StreamTalk.".$request['id'], 'messaging', [
+                StreamTalk::push("private-streamtalk.".$request['id'], 'messaging', [
                     'from_id' => Auth::user()->id,
                     'to_id' => $request['id'],
                     'message' => StreamTalk::messageCard($messageData, true)
@@ -309,7 +309,7 @@ class MessagesController extends Controller
         foreach ($favorites->get() as $favorite) {
             // get user data
             $user = User::where('id', $favorite->favorite_id)->first();
-            $favoritesList .= view('streamtalk::layouts.favorite', [
+            $favoritesList .= view('StreamTalk::layouts.favorite', [
                 'user' => $user,
             ]);
         }
@@ -336,7 +336,7 @@ class MessagesController extends Controller
                     ->where('name', 'LIKE', "%{$input}%")
                     ->paginate($request->per_page ?? $this->perPage);
         foreach ($records->items() as $record) {
-            $getRecords .= view('streamtalk::layouts.listItem', [
+            $getRecords .= view('StreamTalk::layouts.listItem', [
                 'get' => 'search_item',
                 'user' => StreamTalk::getUserWithAvatar($record),
             ])->render();
@@ -365,7 +365,7 @@ class MessagesController extends Controller
 
         // shared with its template
         for ($i = 0; $i < count($shared); $i++) {
-            $sharedPhotos .= view('streamtalk::layouts.listItem', [
+            $sharedPhotos .= view('StreamTalk::layouts.listItem', [
                 'get' => 'sharedPhoto',
                 'image' => StreamTalk::getAttachmentUrl($shared[$i]),
             ])->render();
