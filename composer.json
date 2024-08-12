@@ -24,7 +24,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "pusher/pusher-php-server": "^6.0|^7.0|^7.1"
+    "pusher/pusher-php-server": "^6.0|^7.0|^7.2.4"
   },
   "autoload": {
     "psr-4": {
