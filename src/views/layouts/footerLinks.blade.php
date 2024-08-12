@@ -7,7 +7,7 @@
         sounds: {!! json_encode(config('streamtalk.sounds')) !!},
         allowedImages: {!! json_encode(config('streamtalk.attachments.allowed_images')) !!},
         allowedFiles: {!! json_encode(config('streamtalk.attachments.allowed_files')) !!},
-        maxUploadSize: {{ streamtalk::getMaxUploadSize() }},
+        maxUploadSize: {{ StreamTalk::getMaxUploadSize() }},
         pusher: {!! json_encode(config('streamtalk.pusher')) !!},
         pusherAuthEndpoint: '{{route("pusher.auth")}}'
     };
