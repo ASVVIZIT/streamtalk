@@ -58,7 +58,7 @@ class StreamTalkServiceProvider extends ServiceProvider
 
         // Migrations
 
-        $separator = `_`;
+        $separator = '_';
         $this->publishes([
             __DIR__ . '/database/migrations/2022_01_10_99999_add_active_status_to_users.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'add_active_status_to_users.php'),
             __DIR__ . '/database/migrations/2022_01_10_99999_add_avatar_to_users.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'add_avatar_to_users.php'),
