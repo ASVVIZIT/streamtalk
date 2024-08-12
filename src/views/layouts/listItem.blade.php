@@ -10,7 +10,7 @@
             </td>
             {{-- center side --}}
             <td>
-                <p data-id="{{ Auth::user()->id }}" data-type="user"><span>Твои</span> Сохранённые сообщения</p>
+                <p data-id="{{ Auth::user()->id }}" data-type="user"><span>(Мои)</span> Сохранённые сообщения</p>
                 <span>Сохраняйте сообщения для себя</span>
             </td>
         </tr>

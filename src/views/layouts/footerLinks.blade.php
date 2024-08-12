@@ -1,4 +1,4 @@
-<script src="https://js.pusher.com/7.2.0/pusher.min.js"></script>
+<script src="https://js.pusher.com/7.2.4/pusher.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@3.0.3/dist/index.min.js"></script>
 <script >
     // Gloabl streamtalk variables from PHP to JS
@@ -13,5 +13,5 @@
     };
     window.streamtalk.allAllowedExtensions = streamtalk.allowedImages.concat(streamtalk.allowedFiles);
 </script>
-<script src="{{ asset('js/streamtalk/utils.js') }}"></script>
-<script src="{{ asset('js/streamtalk/code.js') }}"></script>
+<script src="{{ asset('js/StreamTalk/utils.js') }}"></script>
+<script src="{{ asset('js/StreamTalk/code.js') }}"></script>
