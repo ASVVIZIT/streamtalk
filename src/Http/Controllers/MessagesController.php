@@ -1,6 +1,6 @@
 <?php
 
-namespace StreamTalk\Http\Controllers;
+namespace streamtalk\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Response;
 use App\Models\User;
 use App\Models\ChMessage as Message;
 use App\Models\ChFavorite as Favorite;
-use StreamTalk\Facades\StreamTalkMessenger as StreamTalk;
+use sreamtalk\Facades\StreamTalkMessenger as StreamTalk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;

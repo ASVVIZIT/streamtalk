@@ -28,7 +28,7 @@
   },
   "autoload": {
     "psr-4": {
-      "StreamTalk\\": "src/"
+      "streamtalk\\": "src/"
     }
   },
   "extra": {
@@ -37,7 +37,7 @@
         "StreamTalk\\StreamTalkServiceProvider"
       ],
       "aliases": {
-        "StreamTalk": "StreamTalk\\Facades\\StreamTalkMessenger"
+        "streamtalk": "StreamTalk\\Facades\\StreamTalkMessenger"
       }
     }
   }

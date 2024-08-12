@@ -1,13 +1,13 @@
 <?php
 
-namespace StreamTalk\Http\Controllers\Api;
+namespace streamtalk\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
 use App\Models\ChMessage as Message;
 use App\Models\ChFavorite as Favorite;
-use StreamTalk\Facades\StreamTalkMessenger as StreamTalk;
+use sreamtalk\Facades\StreamTalkMessenger as StreamTalk;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

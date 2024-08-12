@@ -1,6 +1,6 @@
 <?php
 
-namespace StreamTalk\Facades;
+namespace streamtalk\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

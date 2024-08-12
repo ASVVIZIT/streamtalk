@@ -1,6 +1,6 @@
 <?php
 
-namespace StreamTalk;
+namespace streamtalk;
 
 use App\Models\ChMessage as Message;
 use App\Models\ChFavorite as Favorite;

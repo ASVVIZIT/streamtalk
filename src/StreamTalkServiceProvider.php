@@ -1,9 +1,9 @@
 <?php
 
-namespace StreamTalk;
+namespace streamtalk;
 
-use StreamTalk\Console\InstallCommand;
-use StreamTalk\Console\PublishCommand;
+use sreamtalk\Console\InstallCommand;
+use sreamtalk\Console\PublishCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,7 +17,7 @@ class StreamTalkServiceProvider extends ServiceProvider
     public function register()
     {
         app()->bind('StreamTalkMessenger', function () {
-            return new \StreamTalk\StreamTalkMessenger;
+            return new \streamtalk\StreamTalkMessenger;
         });
     }
 
@@ -29,7 +29,7 @@ class StreamTalkServiceProvider extends ServiceProvider
     public function boot()
     {
         // Load Views and Routes
-        $this->loadViewsFrom(__DIR__ . '/views', 'StreamTalk');
+        $this->loadViewsFrom(__DIR__ . '/views', 'streamtalk');
         $this->loadRoutes();
 
         if ($this->app->runningInConsole()) {

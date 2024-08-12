@@ -13,5 +13,5 @@
     };
     window.streamtalk.allAllowedExtensions = streamtalk.allowedImages.concat(streamtalk.allowedFiles);
 </script>
-<script src="{{ asset('js/StreamTalk/utils.js') }}"></script>
-<script src="{{ asset('js/StreamTalk/code.js') }}"></script>
+<script src="{{ asset('js/streamtalk/utils.js') }}"></script>
+<script src="{{ asset('js/streamtalk/code.js') }}"></script>

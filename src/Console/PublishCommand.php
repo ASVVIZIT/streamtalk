@@ -1,6 +1,6 @@
 <?php
 
-namespace StreamTalk\Console;
+namespace streamtalk\Console;
 
 use Illuminate\Console\Command;
 

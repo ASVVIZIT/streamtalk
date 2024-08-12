@@ -1,6 +1,6 @@
 <?php
 
-namespace StreamTalk\Traits;
+namespace streamtalk\Traits;
 
 use App\Models\ChMessage as Message;
 

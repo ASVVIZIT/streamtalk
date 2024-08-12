@@ -1,6 +1,6 @@
 <?php
 
-namespace StreamTalk;
+namespace streamtalk;
 
 use Illuminate\Database\Eloquent\Collection;
 
