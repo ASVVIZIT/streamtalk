@@ -2,8 +2,8 @@
 
 namespace StreamTalk;
 
-use streamtalk\Console\InstallCommand;
-use streamtalk\Console\PublishCommand;
+use StreamTalk\Console\InstallCommand;
+use StreamTalk\Console\PublishCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -17,7 +17,7 @@ class StreamTalkServiceProvider extends ServiceProvider
     public function register()
     {
         app()->bind('StreamTalkMessenger', function () {
-            return new \streamtalk\StreamTalkMessenger;
+            return new \StreamTalk\StreamTalkMessenger;
         });
     }
 
