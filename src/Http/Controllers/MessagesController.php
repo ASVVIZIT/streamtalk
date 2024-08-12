@@ -85,7 +85,7 @@ class MessagesController extends Controller
         if (StreamTalk::storage()->exists($filePath)) {
             return StreamTalk::storage()->download($filePath);
         }
-        return abort(404, "Sorry, File does not exist in our server or may have been deleted!");
+        return abort(404, "К сожалению, файл не существует на нашем сервере или, возможно, был удален!");
     }
 
     /**
@@ -122,11 +122,11 @@ class MessagesController extends Controller
                     $file->storeAs(config('streamtalk.attachments.folder'), $attachment, config('streamtalk.storage_disk_name'));
                 } else {
                     $error->status = 1;
-                    $error->message = "File extension not allowed!";
+                    $error->message = "Расширение файла недопустимо!";
                 }
             } else {
                 $error->status = 1;
-                $error->message = "File size you are trying to upload is too large!";
+                $error->message = "Размер файла, который вы пытаетесь загрузить, слишком велик!";
             }
         }
 
@@ -180,7 +180,7 @@ class MessagesController extends Controller
 
         // if there is no messages yet.
         if ($totalMessages < 1) {
-            $response['messages'] ='<p class="message-hint center-el"><span>Say \'hi\' and start messaging</span></p>';
+            $response['messages'] ='<p class="message-hint center-el"><span>Скажите \'Привет\' и начните обмениваться сообщениями</span></p>';
             return Response::json($response);
         }
         if (count($messages->items()) < 1) {
@@ -244,7 +244,7 @@ class MessagesController extends Controller
                 $contacts .= StreamTalk::getContactItem($user);
             }
         } else {
-            $contacts = '<p class="message-hint center-el"><span>Your contact list is empty</span></p>';
+            $contacts = '<p class="message-hint center-el"><span>Ваш список контактов пуст</span></p>';
         }
 
         return Response::json([
@@ -342,7 +342,7 @@ class MessagesController extends Controller
             ])->render();
         }
         if($records->total() < 1){
-            $getRecords = '<p class="message-hint center-el"><span>Nothing to show.</span></p>';
+            $getRecords = '<p class="message-hint center-el"><span>Нечего показывать.</span></p>';
         }
         // send the response
         return Response::json([
@@ -372,7 +372,7 @@ class MessagesController extends Controller
         }
         // send the response
         return Response::json([
-            'shared' => count($shared) > 0 ? $sharedPhotos : '<p class="message-hint"><span>Nothing shared yet</span></p>',
+            'shared' => count($shared) > 0 ? $sharedPhotos : '<p class="message-hint"><span>Еще нет общих файлов</span></p>',
         ], 200);
     }
 
@@ -450,11 +450,11 @@ class MessagesController extends Controller
                     $file->storeAs(config('streamtalk.user_avatar.folder'), $avatar, config('streamtalk.storage_disk_name'));
                     $success = $update ? 1 : 0;
                 } else {
-                    $msg = "File extension not allowed!";
+                    $msg = "Расширение файла недопустимо!";
                     $error = 1;
                 }
             } else {
-                $msg = "File size you are trying to upload is too large!";
+                $msg = "Размер файла, который вы пытаетесь загрузить, слишком велик!";
                 $error = 1;
             }
         }
