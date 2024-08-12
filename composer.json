@@ -37,7 +37,7 @@
         "StreamTalk\\StreamTalkServiceProvider"
       ],
       "aliases": {
-        "streamtalk": "StreamTalk\\Facades\\StreamTalkMessenger"
+        "StreamTalk": "StreamTalk\\Facades\\StreamTalkMessenger"
       }
     }
   }
