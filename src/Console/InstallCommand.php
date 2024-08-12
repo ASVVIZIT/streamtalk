@@ -56,7 +56,7 @@ class InstallCommand extends Command
 
         $assetsToBePublished = [
             'config' => config_path('streamtalk.php'),
-            'views' => resource_path('views/vendor/streamtalk'),
+            'views' => resource_path('views/vendor/StreamTalk'),
             'assets' => public_path('css/streamtalk'),
             'models' => app_path(($this->isV8 ? 'Models/' : '').'ChMessage.php'),
             'migrations' => database_path('migrations/2024_09_22_192348_create_messages_table.php'),
