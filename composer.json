@@ -34,10 +34,10 @@
   "extra": {
     "laravel": {
       "providers": [
-        "StreamTalk\\StreamTalkServiceProvider"
+        "streamtalk\\StreamTalkServiceProvider"
       ],
       "aliases": {
-        "streamtalk": "StreamTalk\\Facades\\StreamTalkMessenger"
+        "streamtalk": "streamtalk\\Facades\\StreamTalkMessenger"
       }
     }
   }
