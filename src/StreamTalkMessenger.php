@@ -184,7 +184,7 @@ class StreamTalkMessenger
         if($renderDefaultCard) {
             $data['isSender'] =  false;
         }
-        return view('StreamTalk::layouts.messageCard', $data)->render();
+        return view('streamtalk::layouts.messageCard', $data)->render();
     }
 
     /**
@@ -265,7 +265,7 @@ class StreamTalkMessenger
     public function getContactItem($user)
     {
         try {
-            // get last message
+            // Get last message
             $lastMessage = $this->getLastMessageQuery($user->id);
             // Get Unseen messages counter
             $unseenCounter = $this->countUnseenMessages($user->id);
@@ -273,7 +273,7 @@ class StreamTalkMessenger
                 $lastMessage->created_at = $lastMessage->created_at->toIso8601String();
                 $lastMessage->timeAgo = $lastMessage->created_at->diffForHumans();
             }
-            return view('StreamTalk::layouts.listItem', [
+            return view('streamtalk::layouts.listItem', [
                 'get' => 'users',
                 'user' => $this->getUserWithAvatar($user),
                 'lastMessage' => $lastMessage,
