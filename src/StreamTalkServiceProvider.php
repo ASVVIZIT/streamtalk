@@ -60,12 +60,12 @@ class StreamTalkServiceProvider extends ServiceProvider
 
         $separator = `_`;
         $this->publishes([
-            __DIR__ . '/database/migrations/2022_01_10_99999_add_active_status_to_users.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('H_i_s') . $separator . '999999_add_active_status_to_users.php'),
-            __DIR__ . '/database/migrations/2022_01_10_99999_add_avatar_to_users.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('H_i_s') . $separator . '999999_add_avatar_to_users.php'),
-            __DIR__ . '/database/migrations/2022_01_10_99999_add_dark_mode_to_users.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('H_i_s') . $separator . '999999_add_dark_mode_to_users.php'),
-            __DIR__ . '/database/migrations/2022_01_10_99999_add_messenger_color_to_users.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('H_i_s') . $separator . 'add_messenger_color_to_users.php'),
-            __DIR__ . '/database/migrations/2022_01_10_99999_create_streamtalk_favorites_table.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('H_i_s') . $separator . 'create_streamtalk_favorites_table.php'),
-            __DIR__ . '/database/migrations/2022_01_10_99999_create_streamtalk_messages_table.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('H_i_s') . $separator . 'create_streamtalk_messages_table.php'),
+            __DIR__ . '/database/migrations/2022_01_10_99999_add_active_status_to_users.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'add_active_status_to_users.php'),
+            __DIR__ . '/database/migrations/2022_01_10_99999_add_avatar_to_users.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'add_avatar_to_users.php'),
+            __DIR__ . '/database/migrations/2022_01_10_99999_add_dark_mode_to_users.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'add_dark_mode_to_users.php'),
+            __DIR__ . '/database/migrations/2022_01_10_99999_add_messenger_color_to_users.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'add_messenger_color_to_users.php'),
+            __DIR__ . '/database/migrations/2022_01_10_99999_create_streamtalk_favorites_table.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'create_streamtalk_favorites_table.php'),
+            __DIR__ . '/database/migrations/2022_01_10_99999_create_streamtalk_messages_table.php' => database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'create_streamtalk_messages_table.php'),
         ], 'streamtalk-migrations');
 
         // Models
