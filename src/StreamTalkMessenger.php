@@ -434,9 +434,10 @@ class StreamTalkMessenger
      */
     public function getUserAvatarUrl($user_avatar_name)
     {
-        return self::storage()->url(
-            config('streamtalk.user_avatar.folder') . '/' . $user_avatar_name
-        );
+        if (empty($user_avatar_name)) {
+            return asset(config('streamtalk.user_avatar.default'));
+        }
+        return asset('storage/' . config('streamtalk.user_avatar.folder') . '/' . $user_avatar_name);
     }
 
     /**
