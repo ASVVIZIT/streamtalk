@@ -292,6 +292,11 @@ class StreamTalkMessenger
      */
     public function getUserWithAvatar($user)
     {
+        // Добавить проверку на пустой аватар
+        if (empty($user->avatar)) {
+            $user->avatar = config('streamtalk.user_avatar.default');
+        }
+
         if ($user->avatar == 'avatar.png' && config('streamtalk.gravatar.enabled')) {
             $imageSize = config('streamtalk.gravatar.image_size');
             $imageset = config('streamtalk.gravatar.imageset');
@@ -429,7 +434,9 @@ class StreamTalkMessenger
      */
     public function getUserAvatarUrl($user_avatar_name)
     {
-        return self::storage()->url(config('streamtalk.user_avatar.folder') . '/' . $user_avatar_name);
+        return self::storage()->url(
+            config('streamtalk.user_avatar.folder') . '/' . $user_avatar_name
+        );
     }
 
     /**

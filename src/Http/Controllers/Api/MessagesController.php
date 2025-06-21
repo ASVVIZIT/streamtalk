@@ -43,13 +43,12 @@ class MessagesController extends Controller
      */
     public function idFetchData(Request $request)
     {
-        return auth()->user();
         // Favorite
         $favorite = StreamTalk::inFavorite($request['id']);
 
         // User data
         if ($request['type'] == 'user') {
-            $fetch = User::where('id', $request['id'])->first();
+            $fetch = User::where('id', $request['id'])->select('id', 'name', 'email', 'avatar')->first();
             if($fetch){
                 $userAvatar = StreamTalk::getUserWithAvatar($fetch)->avatar;
             }
