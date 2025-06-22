@@ -8,144 +8,154 @@ use Illuminate\Support\Facades\File;
 
 class InstallCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'StreamTalk:install';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Install StreamTalk package';
-
-    /**
-     * Check Laravel version.
-     *
-     * @var bool
-     */
+    protected $signature = 'StreamTalk:install {--force}';
+    protected $description = 'Установка пакета StreamTalk';
     private $isV8;
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
     public function handle()
     {
-        $this->isV8 = explode('.',app()->version())[0] >= 8;
+        $this->isV8 = explode('.', app()->version())[0] >= 8;
+        $this->info('Установка StreamTalk...');
 
-        $this->info('Installing StreamTalk...');
-
+        // Шаг 1: Конфигурация моделей
         $this->line('----------');
-        $this->line('Configurations...');
-        $this->modifyModelsPath('/../Http/Controllers/MessagesController.php','User');
-        $this->modifyModelsPath('/../Http/Controllers/MessagesController.php','ChFavorite');
-        $this->modifyModelsPath('/../Http/Controllers/MessagesController.php','ChMessage');
-        $this->modifyModelsPath('/../Http/Controllers/Api/MessagesController.php','User');
-        $this->modifyModelsPath('/../Http/Controllers/Api/MessagesController.php','ChFavorite');
-        $this->modifyModelsPath('/../Http/Controllers/Api/MessagesController.php','ChMessage');
-        $this->modifyModelsPath('/../StreamTalkMessenger.php','ChFavorite');
-        $this->modifyModelsPath('/../StreamTalkMessenger.php','ChMessage');
-        $this->modifyModelsPath('/../Models/ChFavorite.php');
-        $this->modifyModelsPath('/../Models/ChMessage.php');
-        $this->info('[✓] done');
+        $this->line('Конфигурация моделей и контроллеров...');
 
-        $assetsToBePublished = [
+        // Обработка всех указанных файлов
+        $this->modifyFile('/../Http/Controllers/StreamTalk/WebMessagesController.php', 'User');
+        $this->modifyFile('/../Http/Controllers/StreamTalk/WebMessagesController.php', 'ChFavorite');
+        $this->modifyFile('/../Http/Controllers/StreamTalk/WebMessagesController.php', 'ChMessage');
+
+        $this->modifyFile('/../Http/Controllers/StreamTalk/Api/ApiMessagesController.php', 'User');
+        $this->modifyFile('/../Http/Controllers/StreamTalk/Api/ApiMessagesController.php', 'ChFavorite');
+        $this->modifyFile('/../Http/Controllers/StreamTalk/Api/ApiMessagesController.php', 'ChMessage');
+
+        $this->modifyFile('/../StreamTalkMessenger.php', 'ChFavorite');
+        $this->modifyFile('/../StreamTalkMessenger.php', 'ChMessage');
+
+        $this->modifyFile('/../Models/StreamTalk/ChFavorite.php');
+        $this->modifyFile('/../Models/StreamTalk/ChMessage.php');
+
+        $this->info('[✓] Все файлы успешно сконфигурированы');
+
+        // Шаг 2: Публикация ресурсов
+        $assets = [
             'config' => config_path('streamtalk.php'),
             'views' => resource_path('views/vendor/StreamTalk'),
-            'assets' => public_path('css/StreamTalk'),
-            'models' => app_path(($this->isV8 ? 'Models/' : '').'ChMessage.php'),
-            'migrations' => database_path('migrations/2024_09_22_192348_create_messages_table.php'),
+            'assets' => public_path('vendor/StreamTalk'),
+            'migrations' => database_path('migrations'),
+            'models' => app_path('Models/StreamTalk'),
+            'controllers' => app_path('Http/Controllers/StreamTalk'),
             'routes' => base_path('routes/StreamTalk'),
         ];
 
-        foreach ($assetsToBePublished as $target => $path) {
+        foreach ($assets as $target => $path) {
             $this->line('----------');
             $this->process($target, $path);
         }
 
+        // Шаг 3: Создание симлинка хранилища
         $this->line('----------');
-        $this->line('Creating storage symlink...');
+        $this->line('Создание симлинка хранилища...');
         Artisan::call('storage:link');
-        $this->info('[✓] Storage linked.');
+        $this->info('[✓] Симлинк создан');
 
+        // Шаг 4: Выполнение миграций
         $this->line('----------');
-        $this->info('[✓] StreamTalk installed successfully');
+        $this->line('Выполнение миграций...');
+        Artisan::call('migrate');
+        $this->info('[✓] Миграции выполнены');
+
+        // Шаг 5: Очистка кэша
+        $this->line('----------');
+        $this->line('Очистка кэша...');
+        Artisan::call('optimize:clear');
+        $this->info('[✓] Кэш очищен');
+
+        // Завершение установки
+        $this->line('----------');
+        $this->info('[✓] StreamTalk успешно установлен!');
     }
 
     /**
-     * Modify models imports/namespace path according to Laravel version.
+     * Модификация файлов с заменой путей к моделям
      *
-     * @param string $targetFilePath
-     * @param string $model
-     * @return void
+     * @param string $relativePath Относительный путь к файлу
+     * @param string|null $modelName Имя модели для замены (если указано)
      */
-    private function modifyModelsPath($targetFilePath, $model = null){
-        $path = realpath(__DIR__.$targetFilePath);
-        $contents = File::get($path);
-        $model = !empty($model) ? '\\'.$model : ';';
-        $contents = str_replace(
-            (!$this->isV8 ? 'App\Models' : 'App').$model,
-            ($this->isV8 ? 'App\Models' : 'App').$model,
-            $contents
-        );
-        File::put($path, $contents);
+    private function modifyFile($relativePath, $modelName = null)
+    {
+        $fullPath = realpath(__DIR__ . $relativePath);
+
+        if (!file_exists($fullPath)) {
+            $this->error("Файл не найден: {$fullPath}");
+            return;
+        }
+
+        $contents = File::get($fullPath);
+        $newContents = $this->replaceModelPaths($contents, $modelName);
+
+        File::put($fullPath, $newContents);
+        $this->line("Обработан: " . basename($fullPath));
     }
 
     /**
-     * Check, publish, or overwrite the assets.
+     * Замена путей к моделям в содержимом файла
      *
-     * @param string $target
-     * @param string $path
-     * @return void
+     * @param string $contents Исходное содержимое файла
+     * @param string|null $modelName Имя модели для замены
+     * @return string Модифицированное содержимое
      */
+    private function replaceModelPaths($contents, $modelName = null)
+    {
+        // Базовая замена для всех файлов
+        $replacements = [
+            'App\Models\ChMessage' => 'App\Models\StreamTalk\ChMessage',
+            'App\Models\ChFavorite' => 'App\Models\StreamTalk\ChFavorite',
+            'namespace App\Http\Controllers\vendor\StreamTalk' => 'namespace App\Http\Controllers\StreamTalk',
+        ];
+
+        // Дополнительные замены для конкретных моделей
+        if ($modelName) {
+            $oldModel = "App\Models\\{$modelName}";
+            $newModel = $this->isV8
+                ? "App\Models\StreamTalk\\{$modelName}"
+                : "App\StreamTalk\\{$modelName}";
+
+            $replacements[$oldModel] = $newModel;
+        }
+
+        // Применяем все замены
+        foreach ($replacements as $old => $new) {
+            $contents = str_replace($old, $new, $contents);
+        }
+
+        return $contents;
+    }
+
+    // Обработка публикации ресурсов
     private function process($target, $path)
     {
-        $this->line('Publishing '.$target.'...');
-        if (!File::exists($path)) {
-            $this->publish($target);
-            $this->info('[✓] '.$target.' published.');
-            return;
+        $this->line("Публикация {$target}...");
+
+        // Создание директории, если не существует
+        if (!File::isDirectory(dirname($path))) {
+            File::makeDirectory(dirname($path), 0755, true);
         }
-        if ($this->shouldOverwrite($target)) {
-            $this->line('Overwriting '.$target.'...');
-            $this->publish($target,true);
-            $this->info('[✓] '.$target.' published.');
-            return;
+
+        if (!File::exists($path) || $this->option('force')) {
+            $this->publish($target, true);
+            $this->info('[✓] Опубликовано');
+        } else {
+            $this->line('[-] Пропущено (используйте --force для перезаписи)');
         }
-        $this->line('[-] Ignored, The existing '.$target.' was not overwritten');
     }
 
-    /**
-     * Ask to overwrite.
-     *
-     * @param string $target
-     * @return void
-     */
-    private function shouldOverwrite($target)
+    // Вызов публикации
+    private function publish($tag, $force = false)
     {
-        return $this->confirm(
-            $target.' already exists. Do you want to overwrite it?',
-            false
-        );
-    }
-
-    /**
-     * Call the publish command.
-     *
-     * @param string $tag
-     * @param bool $forcePublish
-     * @return void
-     */
-    private function publish($tag, $forcePublish = false)
-    {
-        $this->call('vendor:publish', [
-            '--tag' => 'StreamTalk-'.$tag,
-            '--force' => $forcePublish,
-        ]);
+        $params = ['--tag' => 'StreamTalk-'.$tag];
+        if ($force) $params['--force'] = true;
+        $this->call('vendor:publish', $params);
     }
 }

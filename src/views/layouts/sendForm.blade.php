@@ -1,5 +1,5 @@
 <div class="messenger-sendCard">
-    <form id="message-form" method="POST" action="{{ route('send.message') }}" enctype="multipart/form-data">
+    <form id="message-form" method="POST" action="{{ route('streamtalk.send.message') }}" enctype="multipart/form-data">
         @csrf
         <label><span class="fas fa-plus-circle"></span><input disabled='disabled' type="file" class="upload-attachment" name="file" accept=".{{implode(', .',config('streamtalk.attachments.allowed_images'))}}, .{{implode(', .',config('streamtalk.attachments.allowed_files'))}}" /></label>
         <button class="emoji-button"><span class="fas fa-smile"></span></button>

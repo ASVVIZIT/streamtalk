@@ -21,6 +21,7 @@ const messagesContainer = $(".messenger-messagingView .m-body"),
     messengerTheme = $("meta[name=messenger-theme]").attr("content"),
     defaultMessengerColor = $("meta[name=messenger-color]").attr("content"),
     csrfToken = $('meta[name="csrf-token"]').attr("content");
+const baseUrl = $('meta[name="url"]').attr('content')
 
 const getMessengerId = () => $("meta[name=id]").attr("content");
 const setMessengerId = (id) => $("meta[name=id]").attr("content", id);

@@ -9,110 +9,89 @@
  */
 
 use Illuminate\Support\Facades\Route;
+use StreamTalk\Http\Controllers\StreamTalk\WebMessagesController;
 
-/*
-* This is the main app route [StreamTalk Messenger]
-*/
-Route::get('/', 'MessagesController@index')->name(config('streamtalk.routes.prefix'));
+// Группа маршрутов для веб-интерфейса чата
+// Chat web interface route group
+Route::group([
+    'prefix' => config('streamtalk.routes.prefix'), // Префикс URL: /streamtalk
+    'as' => config('streamtalk.routes.as'), // Префикс для имен маршрутов
+    'middleware' => config('streamtalk.routes.middleware'), // Защита веб-сессии и аутентификация
+], function () {
 
-/**
- *  Fetch info for specific id [user/group]
- */
-Route::post('/idInfo', 'MessagesController@idFetchData');
+    // Главная страница чата
+    // Chat main page
+    Route::get('/', [WebMessagesController::class, 'index'])->name('main');
 
-/**
- * Send message route
- */
-Route::post('/sendMessage', 'MessagesController@send')->name('send.message');
+    // Получение информации о пользователе/группе
+    // Get user/group information
+    Route::post('/idInfo', [WebMessagesController::class, 'idFetchData'])->name('idInfo');
 
-/**
- * Fetch messages
- */
-Route::post('/fetchMessages', 'MessagesController@fetch')->name('fetch.messages');
+    // Отправка сообщения
+    // Send message
+    Route::post('/sendMessage', [WebMessagesController::class, 'send'])->name('send.message');
 
-/**
- * Download attachments route to create a downloadable links
- */
-Route::get('/download/{fileName}', 'MessagesController@download')->name(config('streamtalk.attachments.download_route_name'));
+    // Загрузка сообщений
+    // Fetch messages
+    Route::post('/fetchMessages', [WebMessagesController::class, 'fetch'])->name('fetch.messages');
 
-/**
- * Authentication for pusher private channels
- */
-Route::post('/chat/auth', 'MessagesController@pusherAuth')->name('pusher.auth');
+    // Скачивание вложений
+    // Download attachments
+    Route::get('/download/{fileName}', [WebMessagesController::class, 'download'])->name('download');
 
-/**
- * Make messages as seen
- */
-Route::post('/makeSeen', 'MessagesController@seen')->name('messages.seen');
+    // Аутентификация Pusher
+    // Pusher authentication
+    Route::post('/chat/auth', [WebMessagesController::class, 'pusherAuth'])->name('pusher.auth');
 
-/**
- * Get contacts
- */
-Route::get('/getContacts', 'MessagesController@getContacts')->name('contacts.get');
+    // Пометка сообщений как прочитанных
+    // Mark messages as seen
+    Route::post('/makeSeen', [WebMessagesController::class, 'seen'])->name('messages.seen');
 
-/**
- * Update contact item data
- */
-Route::post('/updateContacts', 'MessagesController@updateContactItem')->name('contacts.update');
+    // Получение контактов
+    // Get contacts
+    Route::get('/getContacts', [WebMessagesController::class, 'getContacts'])->name('contacts.get');
 
+    // Обновление контакта
+    // Update contact
+    Route::post('/updateContacts', [WebMessagesController::class, 'updateContactItem'])->name('contacts.update');
 
-/**
- * Star in favorite list
- */
-Route::post('/star', 'MessagesController@favorite')->name('star');
+    // Добавление в избранное
+    // Add to favorites
+    Route::post('/star', [WebMessagesController::class, 'favorite'])->name('star');
 
-/**
- * get favorites list
- */
-Route::post('/favorites', 'MessagesController@getFavorites')->name('favorites');
+    // Получение избранного
+    // Get favorites
+    Route::post('/favorites', [WebMessagesController::class, 'getFavorites'])->name('favorites');
 
-/**
- * Search in messenger
- */
-Route::get('/search', 'MessagesController@search')->name('search');
+    // Поиск
+    // Search
+    Route::get('/search', [WebMessagesController::class, 'search'])->name('search');
 
-/**
- * Get shared photos
- */
-Route::post('/shared', 'MessagesController@sharedPhotos')->name('shared');
+    // Общие фото
+    // Shared photos
+    Route::post('/shared', [WebMessagesController::class, 'sharedPhotos'])->name('shared');
 
-/**
- * Delete Conversation
- */
-Route::post('/deleteConversation', 'MessagesController@deleteConversation')->name('conversation.delete');
+    // Удаление беседы
+    // Delete conversation
+    Route::post('/deleteConversation', [WebMessagesController::class, 'deleteConversation'])->name('conversation.delete');
 
-/**
- * Delete Message
- */
-Route::post('/deleteMessage', 'MessagesController@deleteMessage')->name('message.delete');
+    // Удаление сообщения
+    // Delete message
+    Route::post('/deleteMessage', [WebMessagesController::class, 'deleteMessage'])->name('message.delete');
 
-/**
- * Update setting
- */
-Route::post('/updateSettings', 'MessagesController@updateSettings')->name('avatar.update');
+    // Обновление настроек
+    // Update settings
+    Route::post('/updateSettings', [WebMessagesController::class, 'updateSettings'])->name('avatar.update');
 
-/**
- * Set active status
- */
-Route::post('/setActiveStatus', 'MessagesController@setActiveStatus')->name('activeStatus.set');
+    // Установка статуса активности
+    // Set active status
+    Route::post('/setActiveStatus', [WebMessagesController::class, 'setActiveStatus'])->name('activeStatus.set');
 
+    // Страница группового чата
+    // Group chat page
+    Route::get('/group/{id}', [WebMessagesController::class, 'index'])->name('group');
 
-
-
-
-
-/*
-* [Group] view by id
-*/
-Route::get('/group/{id}', 'MessagesController@index')->name('group');
-
-/*
-* user view by id.
-* Note : If you added routes after the [User] which is the below one,
-* it will considered as user id.
-*
-* e.g. - The commented routes below :
-*/
-// Route::get('/route', function(){ return 'Munaf'; }); // works as a route
-Route::get('/{id}', 'MessagesController@index')->name('user');
-// Route::get('/route', function(){ return 'Munaf'; }); // works as a user id
+    // Страница пользовательского чата
+    // User chat page
+    Route::get('/{id}', [WebMessagesController::class, 'index'])->name('user');
+});

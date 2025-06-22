@@ -2,8 +2,8 @@
 
 namespace StreamTalk;
 
-use App\Models\ChMessage as Message;
-use App\Models\ChFavorite as Favorite;
+use App\Models\StreamTalk\ChMessage as Message;
+use App\Models\StreamTalk\ChFavorite as Favorite;
 use Illuminate\Support\Facades\Storage;
 use Pusher\Pusher;
 use Illuminate\Support\Facades\Auth;
@@ -13,11 +13,7 @@ class StreamTalkMessenger
 {
     public $pusher;
 
-    /**
-     * Get max file's upload size in MB.
-     *
-     * @return int
-     */
+    // Получение максимального размера загрузки
     public function getMaxUploadSize()
     {
         return config('streamtalk.attachments.max_upload_size') * 1048576;
@@ -25,6 +21,7 @@ class StreamTalkMessenger
 
     public function __construct()
     {
+        // Инициализация Pusher
         $this->pusher = new Pusher(
             config('streamtalk.pusher.key'),
             config('streamtalk.pusher.secret'),
@@ -32,119 +29,70 @@ class StreamTalkMessenger
             config('streamtalk.pusher.options'),
         );
     }
-    /**
-     * This method returns the allowed image extensions
-     * to attach with the message.
-     *
-     * @return array
-     */
+
+    // Получение разрешенных изображений
     public function getAllowedImages()
     {
         return config('streamtalk.attachments.allowed_images');
     }
 
-    /**
-     * This method returns the allowed file extensions
-     * to attach with the message.
-     *
-     * @return array
-     */
+    // Получение разрешенных файлов
     public function getAllowedFiles()
     {
         return config('streamtalk.attachments.allowed_files');
     }
 
-    /**
-     * Returns an array contains messenger's colors
-     *
-     * @return array
-     */
+    // Получение цветов мессенджера
     public function getMessengerColors()
     {
         return config('streamtalk.colors');
     }
 
-    /**
-     * Returns a fallback primary color.
-     *
-     * @return array
-     */
+    // Цвет по умолчанию
     public function getFallbackColor()
     {
         $colors = $this->getMessengerColors();
         return count($colors) > 0 ? $colors[0] : '#000000';
     }
 
-    /**
-     * Trigger an event using Pusher
-     *
-     * @param string $channel
-     * @param string $event
-     * @param array $data
-     * @return void
-     */
+    // Отправка события через Pusher
     public function push($channel, $event, $data)
     {
         return $this->pusher->trigger($channel, $event, $data);
     }
 
-    /**
-     * Authentication for pusher
-     *
-     * @param User $requestUser
-     * @param User $authUser
-     * @param string $channelName
-     * @param string $socket_id
-     * @param array $data
-     * @return void
-     */
+    // Аутентификация Pusher
     public function pusherAuth($requestUser, $authUser, $channelName, $socket_id)
     {
-        // Auth data
         $authData = json_encode([
             'user_id' => $authUser->id,
-            'user_info' => [
-                'name' => $authUser->name
-            ]
+            'user_info' => ['name' => $authUser->name]
         ]);
-        // check if user authenticated
+
         if (Auth::check()) {
             if($requestUser->id == $authUser->id){
-                return $this->pusher->socket_auth(
-                    $channelName,
-                    $socket_id,
-                    $authData
-                );
+                return $this->pusher->socket_auth($channelName, $socket_id, $authData);
             }
-            // if not authorized
             return response()->json(['message'=>'Unauthorized'], 401);
         }
-        // if not authenticated
         return response()->json(['message'=>'Not authenticated'], 403);
     }
 
-    /**
-     * Fetch & parse message and return the message card
-     * view as a response.
-     *
-     * @param Message $prefetchedMessage
-     * @param int $id
-     * @return array
-     */
+    // Парсинг сообщения
     public function parseMessage($prefetchedMessage = null, $id = null)
     {
         $msg = null;
         $attachment = null;
         $attachment_type = null;
         $attachment_title = null;
+
         if (!!$prefetchedMessage) {
             $msg = $prefetchedMessage;
         } else {
             $msg = Message::where('id', $id)->first();
-            if(!$msg){
-                return [];
-            }
+            if(!$msg) return [];
         }
+
         if (isset($msg->attachment)) {
             $attachmentOBJ = json_decode($msg->attachment);
             $attachment = $attachmentOBJ->new_name;
@@ -152,6 +100,7 @@ class StreamTalkMessenger
             $ext = pathinfo($attachment, PATHINFO_EXTENSION);
             $attachment_type = in_array($ext, $this->getAllowedImages()) ? 'image' : 'file';
         }
+
         return [
             'id' => $msg->id,
             'from_id' => $msg->from_id,
@@ -169,42 +118,24 @@ class StreamTalkMessenger
         ];
     }
 
-    /**
-     * Return a message card with the given data.
-     *
-     * @param Message $data
-     * @param boolean $isSender
-     * @return string
-     */
+    // Генерация HTML карточки сообщения
     public function messageCard($data, $renderDefaultCard = false)
     {
-        if (!$data) {
-            return '';
-        }
-        if($renderDefaultCard) {
-            $data['isSender'] =  false;
-        }
+        if (!$data) return '';
+        if($renderDefaultCard) $data['isSender'] = false;
         return view('StreamTalk::layouts.messageCard', $data)->render();
     }
 
-    /**
-     * Default fetch messages query between a Sender and Receiver.
-     *
-     * @param int $user_id
-     * @return Message|\Illuminate\Database\Eloquent\Builder
-     */
+    // Запрос сообщений между пользователями
     public function fetchMessagesQuery($user_id)
     {
-        return Message::where('from_id', Auth::user()->id)->where('to_id', $user_id)
-                    ->orWhere('from_id', $user_id)->where('to_id', Auth::user()->id);
+        return Message::where('from_id', Auth::user()->id)
+            ->where('to_id', $user_id)
+            ->orWhere('from_id', $user_id)
+            ->where('to_id', Auth::user()->id);
     }
 
-    /**
-     * create a new message to database
-     *
-     * @param array $data
-     * @return Message
-     */
+    // Создание нового сообщения
     public function newMessage($data)
     {
         $message = new Message();
@@ -216,176 +147,136 @@ class StreamTalkMessenger
         return $message;
     }
 
-    /**
-     * Make messages between the sender [Auth user] and
-     * the receiver [User id] as seen.
-     *
-     * @param int $user_id
-     * @return bool
-     */
+    // Пометить сообщения как прочитанные
     public function makeSeen($user_id)
     {
-        Message::Where('from_id', $user_id)
-                ->where('to_id', Auth::user()->id)
-                ->where('seen', 0)
-                ->update(['seen' => 1]);
+        Message::where('from_id', $user_id)
+            ->where('to_id', Auth::user()->id)
+            ->where('seen', 0)
+            ->update(['seen' => 1]);
         return 1;
     }
 
-    /**
-     * Get last message for a specific user
-     *
-     * @param int $user_id
-     * @return Message|Collection|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
-     */
+    // Получение последнего сообщения
     public function getLastMessageQuery($user_id)
     {
         return $this->fetchMessagesQuery($user_id)->latest()->first();
     }
 
-    /**
-     * Count Unseen messages
-     *
-     * @param int $user_id
-     * @return Collection
-     */
+    // Подсчет непрочитанных сообщений
     public function countUnseenMessages($user_id)
     {
-        return Message::where('from_id', $user_id)->where('to_id', Auth::user()->id)->where('seen', 0)->count();
+        return Message::where('from_id', $user_id)
+            ->where('to_id', Auth::user()->id)
+            ->where('seen', 0)
+            ->count();
     }
 
-    /**
-     * Get user list's item data [Contact Itme]
-     * (e.g. User data, Last message, Unseen Counter...)
-     *
-     * @param int $messenger_id
-     * @param Collection $user
-     * @return string
-     */
+    // Генерация HTML элемента контакта
     public function getContactItem($user)
     {
         try {
-            // Get last message
             $lastMessage = $this->getLastMessageQuery($user->id);
-            // Get Unseen messages counter
             $unseenCounter = $this->countUnseenMessages($user->id);
+
             if ($lastMessage) {
                 $lastMessage->created_at = $lastMessage->created_at->toIso8601String();
                 $lastMessage->timeAgo = $lastMessage->created_at->diffForHumans();
             }
+
             return view('StreamTalk::layouts.listItem', [
                 'get' => 'users',
                 'user' => $this->getUserWithAvatar($user),
                 'lastMessage' => $lastMessage,
                 'unseenCounter' => $unseenCounter,
-                ])->render();
+            ])->render();
         } catch (\Throwable $th) {
             throw new Exception($th->getMessage());
         }
     }
 
-    /**
-     * Get user with avatar (formatted).
-     *
-     * @param Collection $user
-     * @return Collection
-     */
+    // Получение пользователя с аватаром
     public function getUserWithAvatar($user)
     {
-        // Добавить проверку на пустой аватар
-        if (empty($user->avatar)) {
-            $user->avatar = config('streamtalk.user_avatar.default');
+        $avatarColumn = config('streamtalk.columns.avatar');
+        $defaultAvatar = config('streamtalk.user_avatar.default');
+
+        if (empty($user->{$avatarColumn})) {
+            $user->{$avatarColumn} = $defaultAvatar;
         }
 
-        if ($user->avatar == 'avatar.png' && config('streamtalk.gravatar.enabled')) {
+        // Использование Gravatar если включено
+        if ($user->{$avatarColumn} == $defaultAvatar && config('streamtalk.gravatar.enabled')) {
             $imageSize = config('streamtalk.gravatar.image_size');
             $imageset = config('streamtalk.gravatar.imageset');
-            $user->avatar = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($user->email))) . '?s=' . $imageSize . '&d=' . $imageset;
+            $user->{$avatarColumn} = 'https://www.gravatar.com/avatar/' .
+                md5(strtolower(trim($user->email))) .
+                '?s=' . $imageSize . '&d=' . $imageset;
         } else {
-            $user->avatar = self::getUserAvatarUrl($user->avatar);
+            $user->{$avatarColumn} = $this->getUserAvatarUrl($user->{$avatarColumn});
         }
         return $user;
     }
 
-    /**
-     * Check if a user in the favorite list
-     *
-     * @param int $user_id
-     * @return boolean
-     */
+    // Проверка, есть ли пользователь в избранном
     public function inFavorite($user_id)
     {
         return Favorite::where('user_id', Auth::user()->id)
-                        ->where('favorite_id', $user_id)->count() > 0
-                        ? true : false;
+                ->where('favorite_id', $user_id)->count() > 0;
     }
 
-    /**
-     * Make user in favorite list
-     *
-     * @param int $user_id
-     * @param int $star
-     * @return boolean
-     */
+    // Добавление/удаление из избранного
     public function makeInFavorite($user_id, $action)
     {
         if ($action > 0) {
-            // Star
             $star = new Favorite();
             $star->user_id = Auth::user()->id;
             $star->favorite_id = $user_id;
             $star->save();
             return $star ? true : false;
         } else {
-            // UnStar
-            $star = Favorite::where('user_id', Auth::user()->id)->where('favorite_id', $user_id)->delete();
-            return $star ? true : false;
+            return Favorite::where('user_id', Auth::user()->id)
+                ->where('favorite_id', $user_id)
+                ->delete();
         }
     }
 
     /**
-     * Get shared photos of the conversation
+     * Получение общих фото в беседе
      *
-     * @param int $user_id
-     * @return array
+     * @param int $user_id ID пользователя
+     * @return array Массив с именами файлов
      */
     public function getSharedPhotos($user_id)
     {
-        $images = array(); // Default
-        // Get messages
+        $images = [];
         $msgs = $this->fetchMessagesQuery($user_id)->orderBy('created_at', 'DESC');
+
         if ($msgs->count() > 0) {
             foreach ($msgs->get() as $msg) {
-                // If message has attachment
                 if ($msg->attachment) {
                     $attachment = json_decode($msg->attachment);
-                    // determine the type of the attachment
-                    in_array(pathinfo($attachment->new_name, PATHINFO_EXTENSION), $this->getAllowedImages())
-                    ? array_push($images, $attachment->new_name) : '';
+                    $ext = pathinfo($attachment->new_name, PATHINFO_EXTENSION);
+                    if (in_array($ext, $this->getAllowedImages())) {
+                        $images[] = $attachment->new_name;
+                    }
                 }
             }
         }
         return $images;
     }
 
-    /**
-     * Delete Conversation
-     *
-     * @param int $user_id
-     * @return boolean
-     */
+    // Удаление беседы
     public function deleteConversation($user_id)
     {
         try {
             foreach ($this->fetchMessagesQuery($user_id)->get() as $msg) {
-                // delete file attached if exist
                 if (isset($msg->attachment)) {
                     $path = config('streamtalk.attachments.folder').'/'.json_decode($msg->attachment)->new_name;
                     if (self::storage()->exists($path)) {
                         self::storage()->delete($path);
                     }
                 }
-                // delete from database
                 $msg->delete();
             }
             return 1;
@@ -394,12 +285,7 @@ class StreamTalkMessenger
         }
     }
 
-    /**
-     * Delete message by ID
-     *
-     * @param int $id
-     * @return boolean
-     */
+    // Удаление сообщения по ID
     public function deleteMessage($id)
     {
         try {
@@ -417,21 +303,13 @@ class StreamTalkMessenger
         }
     }
 
-    /**
-     * Return a storage instance with disk name specified in the config.
-     *
-     */
+    // Получение экземпляра хранилища
     public function storage()
     {
         return Storage::disk(config('streamtalk.storage_disk_name'));
     }
 
-    /**
-     * Get user avatar url.
-     *
-     * @param string $user_avatar_name
-     * @return string
-     */
+    // Получение URL аватара пользователя
     public function getUserAvatarUrl($user_avatar_name)
     {
         if (empty($user_avatar_name)) {
@@ -440,12 +318,7 @@ class StreamTalkMessenger
         return asset('storage/' . config('streamtalk.user_avatar.folder') . '/' . $user_avatar_name);
     }
 
-    /**
-     * Get attachment's url.
-     *
-     * @param string $attachment_name
-     * @return string
-     */
+    // Получение URL вложения
     public function getAttachmentUrl($attachment_name)
     {
         return self::storage()->url(config('streamtalk.attachments.folder') . '/' . $attachment_name);

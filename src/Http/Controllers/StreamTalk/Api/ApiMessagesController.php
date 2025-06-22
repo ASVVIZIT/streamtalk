@@ -1,25 +1,30 @@
 <?php
 
-namespace StreamTalk\Http\Controllers\Api;
+namespace StreamTalk\Http\Controllers\StreamTalk\Api;
 
+use App\Models\ChFavorite as Favorite;
+use App\Models\ChMessage as Message;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Response;
-use App\Models\ChMessage as Message;
-use App\Models\ChFavorite as Favorite;
-use StreamTalk\Facades\StreamTalkMessenger as StreamTalk;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use StreamTalk\Facades\StreamTalkMessenger as StreamTalk;
+use StreamTalk\Http\Controllers\Api\JSON;
+use function StreamTalk\Http\Controllers\Api\asset;
+use function StreamTalk\Http\Controllers\Api\collect;
+use function StreamTalk\Http\Controllers\Api\config;
+use function StreamTalk\Http\Controllers\Api\response;
 
 
-class MessagesController extends Controller
+class ApiMessagesController extends Controller
 {
     protected $perPage = 30;
 
-     /**
+    /**
      * Authinticate the connection for pusher
      *
      * @param Request $request
@@ -27,9 +32,14 @@ class MessagesController extends Controller
      */
     public function pusherAuth(Request $request)
     {
+        // Явная проверка аутентификации
+        if (!Auth::guard('sanctum')->check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        $user = Auth::guard('sanctum')->user();
         return StreamTalk::pusherAuth(
-            $request->user(),
-            Auth::user(),
+            $user, // Исправлено: передаем аутентифицированного пользователя
             $request['channel_name'],
             $request['socket_id']
         );
@@ -211,15 +221,15 @@ class MessagesController extends Controller
             $join->on('ch_messages.from_id', '=', 'users.id')
                 ->orOn('ch_messages.to_id', '=', 'users.id');
         })
-        ->where(function ($q) {
-            $q->where('ch_messages.from_id', Auth::user()->id)
-            ->orWhere('ch_messages.to_id', Auth::user()->id);
-        })
-        ->where('users.id','!=',Auth::user()->id)
-        ->select('users.*',DB::raw('MAX(ch_messages.created_at) max_created_at'))
-        ->orderBy('max_created_at', 'desc')
-        ->groupBy('users.id')
-        ->paginate($request->per_page ?? $this->perPage);
+            ->where(function ($q) {
+                $q->where('ch_messages.from_id', Auth::user()->id)
+                    ->orWhere('ch_messages.to_id', Auth::user()->id);
+            })
+            ->where('users.id','!=',Auth::user()->id)
+            ->select('users.*',DB::raw('MAX(ch_messages.created_at) max_created_at'))
+            ->orderBy('max_created_at', 'desc')
+            ->groupBy('users.id')
+            ->paginate($request->per_page ?? $this->perPage);
 
         return response()->json([
             'contacts' => $users->items(),
@@ -275,8 +285,8 @@ class MessagesController extends Controller
     {
         $input = trim(filter_var($request['input']));
         $records = User::where('id','!=',Auth::user()->id)
-                    ->where('name', 'LIKE', "%{$input}%")
-                    ->paginate($request->per_page ?? $this->perPage);
+            ->where('name', 'LIKE', "%{$input}%")
+            ->paginate($request->per_page ?? $this->perPage);
 
         foreach ($records->items() as $index => $record) {
             $records[$index] += StreamTalk::getUserWithAvatar($record);

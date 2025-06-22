@@ -9,7 +9,8 @@
         allowedFiles: {!! json_encode(config('streamtalk.attachments.allowed_files')) !!},
         maxUploadSize: {{ StreamTalk::getMaxUploadSize() }},
         pusher: {!! json_encode(config('streamtalk.pusher')) !!},
-        pusherAuthEndpoint: '{{route("pusher.auth")}}'
+        pusherAuthEndpoint: '{{ route(config('streamtalk.routes.as') . "pusher.auth") }}',
+        downloadRoute: '{{ route(config('streamtalk.routes.as') . "download") }}'
     };
     window._Stream_Talk.allAllowedExtensions = _Stream_Talk.allowedImages.concat(_Stream_Talk.allowedFiles);
 </script>

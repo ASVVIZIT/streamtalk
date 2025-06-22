@@ -20,20 +20,22 @@ $timeAndSeen = "<span data-time='$created_at' class='message-time'>
                 {!! $timeAndSeen !!}
                 {{-- If attachment is a file --}}
                 @if(@$attachment->type == 'file')
-                <a href="{{ route(config('streamtalk.attachments.download_route_name'), ['fileName'=>$attachment->file]) }}" class="file-download">
-                    <span class="fas fa-file"></span> {{$attachment->title}}</a>
+                    <a href="{{ route(config('streamtalk.routes.as') . 'download',['fileName' => $attachment->file]) }}" class="file-download">
+                        <span class="fas fa-file"></span>
+                        {{$attachment->title}}
+                    </a>
                 @endif
             </div>
         @endif
         @if(@$attachment->type == 'image')
-        <div class="image-wrapper" style="text-align: {{$isSender ? 'end' : 'start'}}">
-            <div class="image-file chat-image" style="background-image: url('{{ StreamTalk::getAttachmentUrl($attachment->file) }}')">
-                <div>{{ $attachment->title }}</div>
+            <div class="image-wrapper" style="text-align: {{$isSender ? 'end' : 'start'}}">
+                <div class="image-file chat-image" style="background-image: url('{{ StreamTalk::getAttachmentUrl($attachment->file) }}')">
+                    <div>{{ $attachment->title }}</div>
+                </div>
+                <div style="margin-bottom:5px">
+                    {!! $timeAndSeen !!}
+                </div>
             </div>
-            <div style="margin-bottom:5px">
-                {!! $timeAndSeen !!}
-            </div>
-        </div>
         @endif
     </div>
 </div>

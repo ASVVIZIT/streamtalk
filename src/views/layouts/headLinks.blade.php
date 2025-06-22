@@ -6,11 +6,11 @@
 <meta name="messenger-color" content="{{ $messengerColor }}">
 <meta name="messenger-theme" content="{{ $dark_mode }}">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<meta name="url" content="{{ url('').'/'.config('streamtalk.routes.prefix') }}" data-user="{{ Auth::user()->id }}">
+<meta name="url" content="{{ route(config('streamtalk.routes.as').'main') }}" data-user="{{ Auth::user()->id }}">
 
 {{-- scripts --}}
 <script
-  src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('js/StreamTalk/font.awesome.min.js') }}"></script>
 <script src="{{ asset('js/StreamTalk/autosize.js') }}"></script>
 

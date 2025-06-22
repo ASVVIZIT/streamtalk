@@ -1,20 +1,24 @@
 <?php
 
-namespace StreamTalk\Http\Controllers;
+namespace StreamTalk\Http\Controllers\StreamTalk;
 
+use App\Models\StreamTalk\ChFavorite as Favorite;
+use App\Models\StreamTalk\ChMessage as Message;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Response;
-use App\Models\User;
-use App\Models\ChMessage as Message;
-use App\Models\ChFavorite as Favorite;
-use StreamTalk\Facades\StreamTalkMessenger as StreamTalk;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
-class MessagesController extends Controller
+use StreamTalk\Facades\StreamTalkMessenger as StreamTalk;
+use function StreamTalk\Http\Controllers\abort;
+use function StreamTalk\Http\Controllers\collect;
+use function StreamTalk\Http\Controllers\config;
+use function StreamTalk\Http\Controllers\view;
+
+class WebMessagesController extends Controller
 {
     protected $perPage = 30;
 
@@ -34,6 +38,11 @@ class MessagesController extends Controller
         );
     }
 
+    public function someMethod()
+    {
+        return redirect()->route('streamtalk.home');
+    }
+
     /**
      * Returning the view of the app with the required data.
      *
@@ -42,11 +51,23 @@ class MessagesController extends Controller
      */
     public function index( $id = null)
     {
+        $user = Auth::user();
+        $contact = null;
+
+        if ($id) {
+
+            $contact = User::find($id);
+
+        }
+
         $messenger_color = Auth::user()->messenger_color;
         return view('StreamTalk::pages.app', [
             'id' => $id ?? 0,
+            'contact' => $contact, // передаем контакт (собеседника)
             'messengerColor' => $messenger_color ? $messenger_color : StreamTalk::getFallbackColor(),
             'dark_mode' => Auth::user()->dark_mode < 1 ? 'light' : 'dark',
+            'user' => $user, // Это данные текущего пользователя, то есть мы.
+            'url' => route('streamtalk.home'),
         ]);
     }
 
@@ -180,7 +201,7 @@ class MessagesController extends Controller
 
         // if there is no messages yet.
         if ($totalMessages < 1) {
-            $response['messages'] ='<p class="message-hint center-el"><span>Скажите \'Привет\' и начните обмениваться сообщениями</span></p>';
+            $response['messages'] ='<p class="message-hint center-el"><span>Скажите \'Привет\' и начните обмениваться сообщениями.</span></p>';
             return Response::json($response);
         }
         if (count($messages->items()) < 1) {
@@ -226,15 +247,15 @@ class MessagesController extends Controller
             $join->on('ch_messages.from_id', '=', 'users.id')
                 ->orOn('ch_messages.to_id', '=', 'users.id');
         })
-        ->where(function ($q) {
-            $q->where('ch_messages.from_id', Auth::user()->id)
-            ->orWhere('ch_messages.to_id', Auth::user()->id);
-        })
-        ->where('users.id','!=',Auth::user()->id)
-        ->select('users.*',DB::raw('MAX(ch_messages.created_at) max_created_at'))
-        ->orderBy('max_created_at', 'desc')
-        ->groupBy('users.id')
-        ->paginate($request->per_page ?? $this->perPage);
+            ->where(function ($q) {
+                $q->where('ch_messages.from_id', Auth::user()->id)
+                    ->orWhere('ch_messages.to_id', Auth::user()->id);
+            })
+            ->where('users.id','!=',Auth::user()->id)
+            ->select('users.*',DB::raw('MAX(ch_messages.created_at) max_created_at'))
+            ->orderBy('max_created_at', 'desc')
+            ->groupBy('users.id')
+            ->paginate($request->per_page ?? $this->perPage);
 
         $usersList = $users->items();
 
@@ -333,8 +354,8 @@ class MessagesController extends Controller
         $getRecords = null;
         $input = trim(filter_var($request['input']));
         $records = User::where('id','!=',Auth::user()->id)
-                    ->where('name', 'LIKE', "%{$input}%")
-                    ->paginate($request->per_page ?? $this->perPage);
+            ->where('name', 'LIKE', "%{$input}%")
+            ->paginate($request->per_page ?? $this->perPage);
         foreach ($records->items() as $record) {
             $getRecords .= view('StreamTalk::layouts.listItem', [
                 'get' => 'search_item',
