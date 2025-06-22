@@ -4,12 +4,15 @@ namespace StreamTalk;
 
 use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * Кастомная коллекция сообщений
+ * Custom message collection
+ */
 class MessageCollection extends Collection
 {
     /**
-     * Mark all notifications as read.
-     *
-     * @return void
+     * Пометить все сообщения как прочитанные
+     * Mark all notifications as read
      */
     public function markAsRead()
     {
@@ -17,9 +20,8 @@ class MessageCollection extends Collection
     }
 
     /**
-     * Mark all notifications as unread.
-     *
-     * @return void
+     * Пометить все сообщения как непрочитанные
+     * Mark all notifications as unread
      */
     public function markAsUnread()
     {

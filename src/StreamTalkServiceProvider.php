@@ -2,127 +2,124 @@
 
 namespace StreamTalk;
 
-use StreamTalk\Console\InstallCommand;
-use StreamTalk\Console\PublishCommand;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use StreamTalk\Console\InstallCommand;
+use StreamTalk\Console\PublishCommand;
 
+/**
+ * Сервис-провайдер пакета StreamTalk
+ * StreamTalk package service provider
+ */
 class StreamTalkServiceProvider extends ServiceProvider
 {
+    /**
+     * Регистрация сервисов
+     * Register services
+     */
     public function register()
     {
-        // Регистрация фасада StreamTalkMessenger
-        app()->bind('StreamTalkMessenger', function () {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/streamtalk.php', 'streamtalk'
+        );
+
+        $this->app->singleton('StreamTalkMessenger', function ($app) {
             return new \StreamTalk\StreamTalkMessenger;
         });
     }
 
+    /**
+     * Загрузка сервисов
+     * Bootstrap services
+     */
     public function boot()
     {
-        // Загрузка представлений
-        $this->loadViewsFrom(__DIR__ . '/views', 'StreamTalk');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'streamtalk');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadRoutes();
 
-        // Регистрация консольных команд
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallCommand::class,
                 PublishCommand::class,
             ]);
-            $this->setPublishes();
+
+            $this->configurePublishing();
         }
     }
 
-    // Настройка публикуемых ресурсов
-    protected function setPublishes()
+    /**
+     * Настройка публикации ресурсов
+     * Configure publishable resources
+     */
+    protected function configurePublishing()
     {
-        $userAvatarFolder = config('streamtalk.user_avatar.folder', 'users-avatar');
-        $separator = '_';
-
         // Конфигурация
+        // Configuration
         $this->publishes([
-            __DIR__ . '/config/streamtalk.php' => config_path('streamtalk.php')
-        ], 'StreamTalk-config');
+            __DIR__ . '/../config/streamtalk.php' => config_path('streamtalk.php')
+        ], 'streamtalk-config');
 
-        // Миграции (только объединенная)
+        // Миграции
+        // Migrations
         $this->publishes([
-            __DIR__ . '/database/migrations/2022_01_10_99999_create_streamtalk_tables.php' =>
-                database_path('migrations/' . date('Y_m_d') . $separator . date('His') . $separator . 'create_streamtalk_tables.php'),
-        ], 'StreamTalk-migrations');
-
-        // Модели
-        $this->publishes([
-            __DIR__ . '/Models' => app_path('Models/StreamTalk')
-        ], 'StreamTalk-models');
-
-        // Контроллеры
-        $this->publishes([
-            __DIR__ . '/Http/Controllers' => app_path('Http/Controllers/StreamTalk')
-        ], 'StreamTalk-controllers');
+            __DIR__ . '/../database/migrations' => database_path('migrations')
+        ], 'streamtalk-migrations');
 
         // Представления
+        // Views
         $this->publishes([
-            __DIR__ . '/views' => resource_path('views/vendor/StreamTalk')
-        ], 'StreamTalk-views');
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/streamtalk')
+        ], 'streamtalk-views');
 
-        // Ресурсы (CSS/JS/Изображения/Звуки)
+        // Ресурсы (JS, CSS, изображения, звуки)
+        // Assets (JS, CSS, images, sounds)
         $this->publishes([
-            __DIR__ . '/assets/css' => public_path('css/StreamTalk'),
-            __DIR__ . '/assets/js' => public_path('js/StreamTalk'),
-            __DIR__ . '/assets/imgs' => storage_path('app/public/' . $userAvatarFolder),
-            __DIR__ . '/assets/sounds' => public_path('sounds/StreamTalk'),
-        ], 'StreamTalk-assets');
+            __DIR__ . '/../resources/js' => public_path('vendor/streamtalk/js'),
+            __DIR__ . '/../resources/css' => public_path('vendor/streamtalk/css'),
+            __DIR__ . '/../resources/images' => public_path('vendor/streamtalk/images'),
+            __DIR__ . '/../resources/sounds' => public_path('vendor/streamtalk/sounds'),
+        ], 'streamtalk-assets');
 
-        // Маршруты
+        // Модели (опционально)
+        // Models (optional)
         $this->publishes([
-            __DIR__ . '/routes' => base_path('routes/StreamTalk')
-        ], 'StreamTalk-routes');
+            __DIR__ . '/../Models' => app_path('Models/StreamTalk')
+        ], 'streamtalk-models');
+
+        // Контроллеры (опционально)
+        // Controllers (optional)
+        $this->publishes([
+            __DIR__ . '/../Http/Controllers' => app_path('Http/Controllers/StreamTalk')
+        ], 'streamtalk-controllers');
     }
 
-    // Загрузка маршрутов
+    /**
+     * Загрузка маршрутов
+     * Load routes
+     */
     protected function loadRoutes()
     {
-        if (config('streamtalk.routes.custom')) {
-            // Загрузка кастомных маршрутов
-            Route::group($this->routesConfigurations(), function () {
-                $this->loadRoutesFrom(base_path('routes/StreamTalk/web.php'));
-            });
-            Route::group($this->apiRoutesConfigurations(), function () {
-                $this->loadRoutesFrom(base_path('routes/StreamTalk/api.php'));
-            });
-        } else {
-            // Загрузка стандартных маршрутов
-            Route::group($this->routesConfigurations(), function () {
-                $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
-            });
-            Route::group($this->apiRoutesConfigurations(), function () {
-                $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
-            });
+        if (config('streamtalk.routes.enabled', true)) {
+            // Веб-маршруты
+            // Web routes
+            Route::prefix(config('streamtalk.routes.prefix', 'streamtalk'))
+                ->middleware(config('streamtalk.routes.middleware', ['web', 'auth']))
+                ->namespace('StreamTalk\Http\Controllers')
+                ->as('streamtalk.')
+                ->group(function () {
+                    $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+                });
+
+            // API-маршруты
+            // API routes
+            Route::prefix(config('streamtalk.api_routes.prefix', 'api/streamtalk'))
+                ->middleware(config('streamtalk.api_routes.middleware', ['api', 'auth:sanctum']))
+                ->namespace('StreamTalk\Http\Controllers\Api')
+                ->as('api.streamtalk.')
+                ->group(function () {
+                    $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
+                });
         }
-    }
-
-    // Конфигурация веб-маршрутов
-    private function routesConfigurations()
-    {
-        return [
-            'prefix' => config('streamtalk.routes.prefix'),
-            'namespace' =>  config('streamtalk.routes.namespace'),
-            'middleware' => config('streamtalk.routes.middleware'),
-            'as' => 'streamtalk.' // Добавлен префикс для имен маршрутов
-        ];
-    }
-
-    // Конфигурация API маршрутов
-    private function apiRoutesConfigurations()
-    {
-        return [
-            'prefix' => config('streamtalk.api_routes.prefix'),
-            'namespace' =>  config('streamtalk.api_routes.namespace'),
-            'middleware' => array_merge(
-                config('streamtalk.api_routes.middleware'),
-                ['auth:sanctum']
-            ),
-            'as' => 'api.streamtalk.' // Префикс для API маршрутов
-        ];
     }
 }

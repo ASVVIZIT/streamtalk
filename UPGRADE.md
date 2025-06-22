@@ -1,17 +1,23 @@
+# Руководство по обновлению
 # Upgrade Guide
 
-### For v0.0.20+
+### Для версии v0.0.20+
 ```bash
+# Перепубликовать конфигурацию
 # Re-publish configuration
 php artisan vendor:publish --tag=StreamTalk-config --force
 
+# Обновить маршруты
 # Update routes
 php artisan vendor:publish --tag=StreamTalk-routes --force
 
+# Очистить кеш
 # Clear cache
 php artisan optimize:clear
 
-With every upgrade, make sure to re-publish StreamTalk's assets:
+# При каждом обновлении перепубликуйте ассеты:
+# With every upgrade, make sure to re-publish StreamTalk's assets:
+php artisan vendor:publish --tag=StreamTalk-assets --force
 ```
 ## For v0.0.4 and earlier versions
 
