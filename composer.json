@@ -1,7 +1,7 @@
 {
   "name": "asvvizit/streamtalk",
   "version": "0.1.1",
-  "description": "A package for Laravel PHP Framework to add a complete real-time chat system.",
+  "description": "Laravel package for real-time chat system implementation",
   "type": "library",
   "keywords": [
     "laravel",
@@ -18,13 +18,13 @@
   "authors": [
     {
       "name": "Sergey Andrianov",
-      "email": "dillerasvasviner@gmail.com"
+      "email": "dillerasvasviner@gmail.com",
+      "role": "Developer"
     }
   ],
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "require": {
-    "pusher/pusher-php-server": "^6.0|^7.0|^7.2.4"
+    "php": "^7.3 || ^8.0",
+    "pusher/pusher-php-server": "^5.0 || ^6.0 || ^7.0 || ^8.0"
   },
   "autoload": {
     "psr-4": {
@@ -40,5 +40,21 @@
         "StreamTalk": "StreamTalk\\Facades\\StreamTalkMessenger"
       }
     }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "support": {
+    "email": "dillerasvasviner@gmail.com",
+    "issues": "https://github.com/asvvizit/streamtalk/issues",
+    "source": "https://github.com/asvvizit/streamtalk"
+  },
+  "homepage": "https://github.com/asvvizit/streamtalk",
+  "scripts": {
+    "post-autoload-dump": [
+      "@php artisan vendor:publish --tag=streamtalk-config --ansi"
+    ]
+  },
+  "conflict": {
+    "laravel/framework": "<8.0 || >=13.0"
   }
 }
