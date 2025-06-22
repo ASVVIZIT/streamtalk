@@ -20,7 +20,7 @@ $timeAndSeen = "<span data-time='$created_at' class='message-time'>
                 {!! $timeAndSeen !!}
                 {{-- If attachment is a file --}}
                 @if(@$attachment->type == 'file')
-                    <a href="{{ route(config('streamtalk.routes.as') . 'download',['fileName' => $attachment->file]) }}" class="file-download">
+                    <a href="{{ route(config('streamtalk.routes.as') . 'attachments.download',['fileName' => $attachment->file]) }}" class="file-download">
                         <span class="fas fa-file"></span>
                         {{$attachment->title}}
                     </a>

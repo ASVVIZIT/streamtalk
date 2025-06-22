@@ -1,6 +1,6 @@
 {
   "name": "asvvizit/streamtalk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A package for Laravel PHP Framework to add a complete real-time chat system.",
   "type": "library",
   "keywords": [

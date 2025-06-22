@@ -10,7 +10,7 @@
         maxUploadSize: {{ StreamTalk::getMaxUploadSize() }},
         pusher: {!! json_encode(config('streamtalk.pusher')) !!},
         pusherAuthEndpoint: '{{ route(config('streamtalk.routes.as') . "pusher.auth") }}',
-        downloadRoute: '{{ route(config('streamtalk.routes.as') . "download") }}'
+        downloadRoute: '{{ route(config('streamtalk.routes.as') . "attachments.download") }}'
     };
     window._Stream_Talk.allAllowedExtensions = _Stream_Talk.allowedImages.concat(_Stream_Talk.allowedFiles);
 </script>

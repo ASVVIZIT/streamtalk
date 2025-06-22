@@ -34,7 +34,7 @@
     <div class="app-modal-container">
         <div class="app-modal-card" data-name="settings" data-modal='0'>
             <div class="app-modal-form">
-                <form id="update-settings" action="{{ route('streamtalk.avatar.update') }}" enctype="multipart/form-data" method="POST">
+                <form id="update-settings" action="{{ route(config('streamtalk.routes.as') . 'avatar.update') }}" enctype="multipart/form-data" method="POST">
                     @csrf
                     {{-- <div class="app-modal-header">Update your profile settings</div> --}}
                     <div class="app-modal-body">
