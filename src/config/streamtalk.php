@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'name' => env('STREAMTALK_NAME', 'StreamTalk Messenger'),
-    'version' => env('STREAMTALK_VERSION', '0.1.3'),
+    'version' => env('STREAMTALK_VERSION', include __DIR__.'/../../version.php'),
     'debug' => env('STREAMTALK_DEBUG', env('APP_DEBUG', false)),
     'timezone' => env('STREAMTALK_TIMEZONE', config('app.timezone')),
 

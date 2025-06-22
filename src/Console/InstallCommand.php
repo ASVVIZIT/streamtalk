@@ -17,62 +17,70 @@ class InstallCommand extends Command
 
     public function handle()
     {
-        $this->info('🚀 Starting StreamTalk installation...');
+        $steps = 8; // Общее количество шагов
+        // Получаем версию из единого источника
+        $version = include __DIR__.'/../version.php';
+
+        $this->line("🚀 Starting StreamTalk v{$version} installation...");
         $this->line('----------------------------------------');
 
         // Шаг 1: Публикация конфигурации
-        // Step 1: Publish configuration
-        $this->line('[1/6] 📝 Publishing configuration...');
+        $this->line("[1/{$steps}] 📝 Publishing configuration...");
         $this->call('vendor:publish', [
             '--provider' => 'StreamTalk\StreamTalkServiceProvider',
             '--tag' => 'streamtalk-config',
             '--force' => $this->option('force')
         ]);
 
-        // Шаг 2: Публикация ресурсов (CSS, JS, изображения)
-        // Step 2: Publish assets (CSS, JS, images)
-        $this->line('[2/6] 🖼️ Publishing assets...');
+        // Шаг 2: Публикация ресурсов
+        $this->line("[2/{$steps}] 🖼️ Publishing assets...");
         $this->call('vendor:publish', [
             '--provider' => 'StreamTalk\StreamTalkServiceProvider',
             '--tag' => 'streamtalk-assets',
             '--force' => $this->option('force')
         ]);
 
-        // Шаг 3: Публикация представлений (Blade шаблоны)
-        // Step 3: Publish views (Blade templates)
-        $this->line('[3/6] 👀 Publishing views...');
+        // Шаг 3: Публикация представлений
+        $this->line("[3/{$steps}] 👀 Publishing views...");
         $this->call('vendor:publish', [
             '--provider' => 'StreamTalk\StreamTalkServiceProvider',
             '--tag' => 'streamtalk-views',
             '--force' => $this->option('force')
         ]);
 
-        // Шаг 4: Модификация файлов (обновление пространств имен)
-        // Step 4: Modify files (update namespaces)
-        $this->line('[4/6] 🔧 Modifying files for StreamTalk...');
+        // Шаг 4: Модификация файлов
+        $this->line("[4/{$steps}] 🔧 Modifying files...");
         $this->modifyFiles();
 
-        // Шаг 5: Публикация миграций (создание таблиц)
-        // Step 5: Publish migrations (create tables)
-        $this->line('[5/6] 🗃️ Publishing migrations...');
+        // Шаг 5: Публикация миграций
+        $this->line("[5/{$steps}] 🗃️ Publishing migrations...");
         $this->call('vendor:publish', [
             '--provider' => 'StreamTalk\StreamTalkServiceProvider',
             '--tag' => 'streamtalk-migrations',
             '--force' => $this->option('force')
         ]);
 
-        // Шаг 6: Выполнение миграций (применение изменений БД)
-        // Step 6: Run migrations (apply database changes)
-        $this->line('[6/6] ⚙️ Running migrations...');
+        // Шаг 6: Выполнение миграций
+        $this->line("[6/{$steps}] ⚙️ Running migrations...");
         Artisan::call('migrate');
 
+        // Шаг 7: Создание симлинка хранилища
+        $this->line("[7/{$steps}] 🔗 Creating storage link...");
+        Artisan::call('storage:link');
+
+        // Шаг 8: Оптимизация приложения
+        $this->line("[8/{$steps}] ⚡ Optimizing application...");
+        Artisan::call('config:cache');
+        Artisan::call('route:cache');
+
         $this->newLine();
-        $this->info('✅ StreamTalk installed successfully!');
+        $this->line("✅ Finish StreamTalk v{$version} installed successfully!");
         $this->line('----------------------------------------');
         $this->line('Next steps:');
         $this->line('1. Configure Pusher credentials in .env file');
         $this->line('2. Run: npm install && npm run dev');
         $this->line('3. Include chat component: @include("streamtalk::layouts.app")');
+        $this->line('4. Configure your filesystems.php for storage');
         $this->line('----------------------------------------');
     }
 

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use StreamTalk\Console\InstallCommand;
 use StreamTalk\Console\PublishCommand;
+use StreamTalk\Console\VersionCommand;
 
 /**
  * Сервис-провайдер пакета StreamTalk
@@ -42,6 +43,7 @@ class StreamTalkServiceProvider extends ServiceProvider
             $this->commands([
                 InstallCommand::class,
                 PublishCommand::class,
+                VersionCommand::class,
             ]);
 
             $this->configurePublishing();

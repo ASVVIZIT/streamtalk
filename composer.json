@@ -52,6 +52,12 @@
   "scripts": {
     "post-autoload-dump": [
       "@php artisan vendor:publish --tag=streamtalk-config --ansi"
+    ],
+    "post-update-cmd": [
+      "php -r \"file_put_contents('composer.json', preg_replace('/\\\"version\\\":\\s*\\\"[^\\\"]+\\\"/', '\"version\": \"' . include 'version.php' . '\"', file_get_contents('composer.json')));\""
+    ],
+    "post-install-cmd": [
+      "@post-update-cmd"
     ]
   },
   "conflict": {
