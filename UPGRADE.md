@@ -43,3 +43,38 @@ php artisan StreamTalk:publish --force
 ```
 
 > This will overwrite all the assets, so all your changes will be overwritten.
+
+
+## For developer block
+### List versions (VERSION_HISTORY.log)
+#### Повысить patch-версию
+```bach
+composer update-version-bump
+```
+#### Повысить minor-версию
+```bach
+composer update-version-bump minor
+```
+#### Повысить major-версию
+```bach
+composer update-version-bump major
+```
+#### Установить кастомную версию
+```bach
+composer update-version-bump ver 31.181.546
+```
+### Run 
+```bach
+composer update-version-bump ver 2.0.0
+```
+### Пример вывода:
+```bach
+> Bump-Version.bat ver 2.0.0
+Current version: 1.5.7
+New version: 2.0.0
+SUCCESS: composer.json updated
+SUCCESS: config/streamtalk.php updated
+SUCCESS: .env.example updated
+SUCCESS: .env.streamtalk updated
+Version updated successfully!
+```

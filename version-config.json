@@ -1,0 +1,25 @@
+{
+  "version_source": "VERSION",
+  "targets": [
+    {
+      "file": "composer.json",
+      "pattern": "\"version\":\\s*\"[^\"]+\"",
+      "replacement": "\"version\": \"{version}\""
+    },
+    {
+      "file": "src\\config\\streamtalk.php",
+      "pattern": "'version' => env\\s*\\(\\s*'STREAMTALK_VERSION'\\s*,\\s*'[^']+'\\s*\\)",
+      "replacement": "'version' => env('STREAMTALK_VERSION', '{version}')"
+    },
+    {
+      "file": ".env.example",
+      "pattern": "STREAMTALK_VERSION=.*",
+      "replacement": "STREAMTALK_VERSION={version}"
+    },
+    {
+      "file": ".env.streamtalk",
+      "pattern": "STREAMTALK_VERSION=.*",
+      "replacement": "STREAMTALK_VERSION={version}"
+    }
+  ]
+}

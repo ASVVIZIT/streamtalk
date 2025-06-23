@@ -1,6 +1,6 @@
 {
   "name": "asvvizit/streamtalk",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Laravel package for real-time chat system implementation",
   "type": "library",
   "keywords": [
@@ -50,11 +50,10 @@
   },
   "homepage": "https://github.com/asvvizit/streamtalk",
   "scripts": {
+    "update-version": "Update-Version.bat",
+    "update-version-bump": "Bump-Version.bat",
     "post-autoload-dump": [
       "@php artisan vendor:publish --tag=streamtalk-config --ansi"
-    ],
-    "post-update-cmd": [
-      "php -r \"file_put_contents('composer.json', preg_replace('/\\\"version\\\":\\s*\\\"[^\\\"]+\\\"/', '\"version\": \"' . include 'version.php' . '\"', file_get_contents('composer.json')));\""
     ],
     "post-install-cmd": [
       "@post-update-cmd"
@@ -64,3 +63,104 @@
     "laravel/framework": "<8.0 || >=13.0"
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
